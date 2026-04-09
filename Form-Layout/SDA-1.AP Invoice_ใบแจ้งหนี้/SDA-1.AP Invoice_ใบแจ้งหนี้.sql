@@ -1,4 +1,4 @@
-SELECT OINV.DocEntry, OINV.DocDate, OINV.DocDueDate, OINV.DocStatus, OINV.DocType, OINV.DocNum ,OINV.CardCode, OINV.CardName ,OINV.DocTotal 
+SELECT OINV.DocEntry, OINV.DocDate, OINV.DocDueDate, OINV.DocStatus, OINV.DocType, OINV.DocNum ,OINV.CardCode, OINV.CardName ,OINV.DocTotal,OINV.DocDate
 
 From OINV
 Where OINV.DocDate >= '2026-01-01'
