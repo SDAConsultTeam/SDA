@@ -85,7 +85,7 @@ LEFT JOIN OPRJ ON PDN1.Project = OPRJ.PrjCode
 LEFT JOIN [dbo].[@SLDT_SET_BRANCH] BRANCH ON OPDN.U_SLD_LVatBranch = BRANCH.Code , oadm
 
 
-WHERE OPDN.DocEntry  = '{?Dockey@}'
+WHERE OPDN.DocEntry  = 4
 
 Union all
 SELECT DISTINCT
@@ -174,6 +174,6 @@ LEFT JOIN OUSR ON OPDN.UserSign = OUSR.USERID
 --LEFT JOIN OPRJ ON PDN1.Project = OPRJ.PrjCode
 LEFT JOIN [dbo].[@SLDT_SET_BRANCH] BRANCH ON OPDN.U_SLD_LVatBranch = BRANCH.Code , oadm
 
-WHERE OPDN.DocEntry  = '{?Dockey@}'
+WHERE OPDN.DocEntry  = 4
 
 Order by 'No.' , 'Line No.'

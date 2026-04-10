@@ -1,12 +1,4 @@
-﻿-- ============================================================
--- Report: 2.Goods Return_EN_ใบส่งคืนสินค้า_(Batch_Serial).rpt
-Path:   3. Purchasing - AP\5. Goods Return\2.Goods Return_EN_ใบส่งคืนสินค้า_(Batch_Serial).rpt
-Extracted: 2026-04-09 15:22:44
--- Source: Main Report
--- Table:  Command
--- ============================================================
-
-SELECT distinct
+﻿SELECT distinct
 CONCAT(OCPR.FirstName,' ',OCPR.LastName) AS 'Coontact',
 BRANCH.Code ,
 CASE WHEN BRANCH.Code = '00000' AND ORPD.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่' 
@@ -61,11 +53,13 @@ ORPD.DocDate,
 ORPD.DocNum, 
 NNM1.BeginStr,
 ORPD.CreateDate,
+ORPD.CardCode,
+ORPD.U_SLD_Returnreason,
 RPD1.unitMsr,
 RPD1.LineType,
 rpD1.Project,
 OCRD.CntctPrsn,
-OCrd.MailAddres,
+OCrd.E_Mail,
 ocrd.phone1,
 ocrd.phone2,
 CAST(rpd12.StreetB AS nvarchar(max)) as StreetB, CAST(rpd12.StreetNoB AS nvarchar(max)) as StreetNoB,CAST(rpd12.BlockB AS nvarchar(max)) as BlockB, CAST(rpd12.BuildingB AS nvarchar(max)) as BuildingB, 
@@ -141,11 +135,13 @@ ORPD.DocDate,
 ORPD.DocNum, 
 NNM1.BeginStr,
 ORPD.CreateDate,
+ORPD.CardCode,
+ORPD.U_SLD_Returnreason,
 '' as unitMsr,
 RPD10.LineType,
 rpD1.Project,
 OCRD.CntctPrsn,
-OCrd.MailAddres,
+OCrd.E_Mail,
 ocrd.phone1,
 ocrd.phone2,
 CAST(rpd12.StreetB AS nvarchar(max)) as StreetB, CAST(rpd12.StreetNoB AS nvarchar(max)) as StreetNoB,CAST(rpd12.BlockB AS nvarchar(max)) as BlockB, CAST(rpd12.BuildingB AS nvarchar(max)) as BuildingB, 
@@ -166,4 +162,3 @@ LEFT JOIN [dbo].[@SLDT_SET_BRANCH] BRANCH ON ORPD.U_SLD_LVatBranch = BRANCH.Code
 
 WHERE ORPD.DocEntry = {?DocKey@}
 Order by 'No.' , 'Line No.'
-
