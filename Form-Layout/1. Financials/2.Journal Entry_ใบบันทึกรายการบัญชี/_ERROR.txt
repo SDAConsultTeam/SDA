@@ -1,2 +1,0 @@
-﻿ERROR processing this report
-Error processing '1. Financials\2.Journal Entry_ใบบันทึกรายการบัญชี.rpt': Exception calling "Load" with "1" argument(s): "Load report failed."

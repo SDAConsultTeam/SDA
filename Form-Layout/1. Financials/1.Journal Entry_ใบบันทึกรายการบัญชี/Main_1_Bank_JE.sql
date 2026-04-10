@@ -114,6 +114,7 @@ CASE
 	ELSE NULL
 END AS 'Series_link' 
 ,ad.*
+,T1.Project
 
 FROM OJDT 
 LEFT JOIN JDT1 T1 ON OJDT.[TransId] = T1.[TransId]
@@ -154,6 +155,6 @@ left JOIN (select top 1 A.CardName , A.TransId
 	)AD
 
 
-WHERE OJDT.[TransId] = '1'
+WHERE OJDT.[TransId] = '{?DocKey@}'
 
 ORDER BY (T1.Line_ID+1)
