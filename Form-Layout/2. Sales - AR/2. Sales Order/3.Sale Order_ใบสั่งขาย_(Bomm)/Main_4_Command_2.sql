@@ -1,12 +1,4 @@
-﻿-- ============================================================
--- Report: 3.Sale Order_ใบสั่งขาย_(Bomm).rpt
-Path:   3.Sale Order_ใบสั่งขาย_(Bomm).rpt
-Extracted: 2026-04-10 10:22:54
--- Source: Main Report
--- Table:  Command_2
--- ============================================================
-
-SELECT OHEM.picture
+﻿SELECT OHEM.picture
 FROM OPRQ
         INNER JOIN OHEM ON OPRQ."UserSign" = OHEM."userId"
         INNER JOIN 
