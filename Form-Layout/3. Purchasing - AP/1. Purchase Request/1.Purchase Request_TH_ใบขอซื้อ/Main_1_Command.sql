@@ -1,215 +1,166 @@
 ﻿SELECT DISTINCT
+BRANCH.Code ,
+CASE WHEN BRANCH.Code = '00000' AND OPQT.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่' 
+  WHEN BRANCH.Code = '00000' AND OPQT.DocCur <> OADM.MainCurncy THEN 'Head office' 
+  WHEN BRANCH.Code <> '00000' AND OPQT.DocCur = OADM.MainCurncy THEN concat(N'สาขาที่' ,' ',BRANCH.Code) 
+  WHEN BRANCH.Code <> '00000' AND OPQT.DocCur <> OADM.MainCurncy THEN concat('Branch' ,' ',BRANCH.Code) 
+END 'GLN_H' ,
+CASE WHEN CRD1.GlblLocNum = '00000' AND OPQT.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่' 
+  WHEN CRD1.GlblLocNum = '00000' AND OPQT.DocCur <> OADM.MainCurncy THEN 'Head office' 
+  WHEN CRD1.GlblLocNum <> '00000' AND OPQT.DocCur = OADM.MainCurncy THEN concat(N'สาขาที่' ,' ',CRD1.GlblLocNum) 
+  WHEN CRD1.GlblLocNum <> '00000' AND OPQT.DocCur <> OADM.MainCurncy THEN concat('Branch' ,' ',CRD1.GlblLocNum) 
+END 'GLN_BP' ,
 BRANCH.[Name] As 'BranchName',
+BRANCH.U_SLD_VTAXID As 'TaxIdNum',
 BRANCH.U_SLD_VComName As 'PrintHeadr',
 BRANCH.U_SLD_F_VComName As 'PrintHdrF',
-BRANCH.U_SLD_VTAXID As 'TaxIdNum',
-BRANCH.U_SLD_Building As 'Building',
-BRANCH.U_SLD_Steet As 'Street',
-BRANCH.U_SLD_Block As 'Block',
-BRANCH.U_SLD_City As 'City',
-BRANCH.U_SLD_County As 'County',
+CASE WHEN OPQT.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_Building ELSE BRANCH.U_SLD_F_Building END AS 'Building',
+CASE WHEN OPQT.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_Steet  ELSE BRANCH.U_SLD_F_Steet  END AS 'Street',
+CASE WHEN OPQT.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_Block  ELSE BRANCH.U_SLD_F_Block   END AS 'Block',
+CASE WHEN OPQT.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_City  ELSE BRANCH.U_SLD_F_City  END As 'City',
+CASE WHEN OPQT.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_County ELSE BRANCH.U_SLD_F_County  END As 'County',
 BRANCH.U_SLD_ZipCode As 'ZipCode',
 BRANCH.U_SLD_Tel As 'Tel',
 BRANCH.U_SLD_Fax As 'BFax',
-OHEM.firstName,
-OHEM.lastName,
-OPRQ.DocEntry,
-OPRQ.docdate,
-NNM1.BeginStr, 
-OPRQ.DocNum,
-OPRQ.ReqName,
+BRANCH.U_SLD_Email AS 'E-Mail',
+PQT1.LineTotal,
+opqt.VatSumFC,
+OPQT.DocTotalFC,
+OPQT.DocCur,
+PQT1.TotalFrgn,
+OPQT.DocEntry,
+OPQT.[Address],
 OCRD.U_SLD_Title,
 OCRD.U_SLD_FullName,
-CASE WHEN CRD1.GlblLocNum IS NULL THEN ''
-  WHEN CRD1.GlblLocNum IS NOT NULL THEN N'สาขาที่ ' + CRD1.GlblLocNum
-  END 'GLN',
 CASE WHEN OCRD.Phone2 IS NULL THEN ''
   WHEN OCRD.Phone2 IS NOT NULL THEN ', ' + OCRD.Phone2
   END 'Phone2',
-OCRD.Phone1,
-ISNULL(OUDP.[Name],'') AS 'Department',
-(PRQ1.VisOrder) AS 'No.', 
-PRQ1.LineNum as 'Line No.', 
-PRQ1.Dscription as 'Dscription', 
-PRQ1.Quantity, 
-PRQ1.Price,
-PRQ1.LineTotal,
-PRQ1.unitmsr,
-ISNULL(OPRQ.Comments,'') AS 'Comments',
-((SUM(OITW.OnHand)-SUM(OITW.IsCommited))+SUM(OITW.OnOrder)) AS 'Available',
-OPRQ.ReqDate,
-PRQ1.ItemCode,
-PRQ1.LineType,
-PRQ1.Project,
-PRQ1.U_SLD_Dis_Amount
+OCRD.Phone1, 
+ISNULL(OCRD.Fax,'') AS 'Fax', 
+OCRD.LicTradNum,
+ISNULL(pqt12.GlbLocNumB,'') AS 'GlbLocNumB',
+ISNULL(NNM1.BeginStr,'') AS 'BeginStr', 
+OPQT.DocNum, 
+OPQT.DocDate, 
+OPQT.DocDueDate, 
+(PQT1.VisOrder) AS 'No.', 
+PQT1.LineNum as 'Line No.', 
+PQT1.ItemCode, 
+PQT1.Dscription as 'Dscription', 
+PQT1.Quantity, 
+PQT1.Price, 
+PQT1.TotalSumSy,
+PQT1.UomCode, 
+OPQT.VatSum, 
+OPQT.DocTotal,
+pqt1.unitMsr,
+PQT1.LineType,
+CONCAT(OCPR.FirstName,' ',OCPR.LastName) AS 'Coontact',
+pqt1.Project,
+ocrd.CntctPrsn,
+ocrd.E_Mail,
+ocrd.Phone1,
+ocrd.Phone2,
+pqt1.DiscPrcnt,
+pqt1.U_SLD_Dis_Amount,
+CAST(pqt12.StreetB AS nvarchar(max)) as StreetB, CAST(pqt12.StreetNoB AS nvarchar(max)) as StreetNoB,CAST(pqt12.BlockB AS nvarchar(max)) as BlockB, CAST(pqt12.BuildingB AS nvarchar(max)) as BuildingB, 
+CAST(pqt12.CityB AS nvarchar(max)) as CityB, pqt12.ZipCodeB, CAST(pqt12.CountyB AS nvarchar(max)) as CountyB, pqt12.StateB,
+opqt.cardcode
 
+FROM OPQT 
+INNER JOIN PQT1 ON OPQT.DocEntry = PQT1.DocEntry
+inner join PQT12 on OPQT.DocEntry = PQT12.DocEntry
+LEFT JOIN OCRD ON OCRD.CardCode = OPQT.CardCode 
+LEFT JOIN OCPR ON OCRD.CardCode = OCPR.CardCode AND OPQT.cntctcode = OCPR.cntctcode
+LEFT JOIN CRD1 ON (OCRD.CardCode = CRD1.CardCode AND OPQT.PaytoCode = CRD1.[Address] AND  CRD1.AdresType ='B')
+LEFT JOIN NNM1 ON OPQT.Series = NNM1.Series
+LEFT JOIN OUSR ON OPQT.UserSign = OUSR.USERID
+LEFT JOIN OPRJ ON PQT1.Project = OPRJ.PrjCode
+LEFT JOIN [dbo].[@SLDT_SET_BRANCH] BRANCH ON OPQT.U_SLD_LVatBranch = BRANCH.Code, OADM
 
-FROM OPRQ
-INNER JOIN PRQ1 ON OPRQ.DocEntry = PRQ1.DocEntry
-LEFT JOIN OCRD ON OPRQ.CardCode = OCRD.CardCode 
-LEFT JOIN CRD1 ON OCRD.CardCode = CRD1.CardCode AND CRD1.AdresType = 'B' AND CRD1.[Address] = OPRQ.PayToCode
-LEFT JOIN NNM1 ON OPRQ.Series = NNM1.Series 
-LEFT JOIN OUDP ON OPRQ.Department = OUDP.Code
-LEFT JOIN OHEM ON (SELECT CASE WHEN ReqType = '12' THEN UserSign ELSE Requester END FROM OPRQ WHERE DocEntry  = {?DocKey@}) = OHEM.empID
-LEFT JOIN OHPS ON OHEM.position = OHPS.posID
-LEFT JOIN OBPL ON OPRQ.BPLId = OBPL.BPLId
-LEFT JOIN OITM ON PRQ1.ItemCode = OITM.ItemCode
-LEFT JOIN OWHS ON PRQ1.WhsCode = OWHS.WhsCode
-LEFT JOIN OITW ON PRQ1.ItemCode = OITW.ItemCode 
-LEFT JOIN OPRJ ON PRQ1.Project = OPRJ.PrjCode
-LEFT JOIN OUSR ON OPRQ.UserSign = OUSR.USERID
-LEFT JOIN [dbo].[@SLDT_SET_BRANCH] BRANCH ON CAST(OPRQ.U_SLD_LVatBranch AS NVARCHAR(30)) = BRANCH.Code
-
-WHERE OPRQ.DocEntry  = {?DocKey@}
-
-GROUP BY
-BRANCH.[Name],
-BRANCH.U_SLD_VComName,
-BRANCH.U_SLD_F_VComName,
-BRANCH.U_SLD_VTAXID,
-BRANCH.U_SLD_Building,
-BRANCH.U_SLD_Steet,
-BRANCH.U_SLD_Block,
-BRANCH.U_SLD_City,
-BRANCH.U_SLD_County,
-BRANCH.U_SLD_ZipCode,
-BRANCH.U_SLD_Tel,
-BRANCH.U_SLD_Fax,
-OHEM.firstName,
-OHEM.lastName,
-OPRQ.DocEntry,
-OPRQ.docdate,
-NNM1.BeginStr, 
-OPRQ.DocNum,
-OPRQ.ReqName,
-OCRD.U_SLD_Title,
-OCRD.U_SLD_FullName,
-CASE WHEN CRD1.GlblLocNum IS NULL THEN ''
-  WHEN CRD1.GlblLocNum IS NOT NULL THEN N'สาขาที่ ' + CRD1.GlblLocNum
-  END ,
-CASE WHEN OCRD.Phone2 IS NULL THEN ''
-  WHEN OCRD.Phone2 IS NOT NULL THEN ', ' + OCRD.Phone2
-  END ,
-OCRD.Phone1,
-OUDP.[Name],
-(PRQ1.VisOrder), 
-PRQ1.LineNum,
-PRQ1.Dscription, 
-PRQ1.Quantity, 
-PRQ1.Price,
-PRQ1.LineTotal,
-PRQ1.unitmsr,
-OPRQ.Comments,
-OPRQ.ReqDate,
-PRQ1.ItemCode,
-PRQ1.LineType,
-PRQ1.Project,
-PRQ1.U_SLD_Dis_Amount
-
+WHERE OPQT.DocEntry = {?DocKey@}
 
 Union all
 SELECT DISTINCT
+BRANCH.Code ,
+CASE WHEN BRANCH.Code = '00000' AND OPQT.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่' 
+  WHEN BRANCH.Code = '00000' AND OPQT.DocCur <> OADM.MainCurncy THEN 'Head office' 
+  WHEN BRANCH.Code <> '00000' AND OPQT.DocCur = OADM.MainCurncy THEN concat(N'สาขาที่' ,' ',BRANCH.Code) 
+  WHEN BRANCH.Code <> '00000' AND OPQT.DocCur <> OADM.MainCurncy THEN concat('Branch' ,' ',BRANCH.Code) 
+END 'GLN_H' ,
+CASE WHEN CRD1.GlblLocNum = '00000' AND OPQT.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่' 
+  WHEN CRD1.GlblLocNum = '00000' AND OPQT.DocCur <> OADM.MainCurncy THEN 'Head office' 
+  WHEN CRD1.GlblLocNum <> '00000' AND OPQT.DocCur = OADM.MainCurncy THEN concat(N'สาขาที่' ,' ',CRD1.GlblLocNum) 
+  WHEN CRD1.GlblLocNum <> '00000' AND OPQT.DocCur <> OADM.MainCurncy THEN concat('Branch' ,' ',CRD1.GlblLocNum) 
+END 'GLN_BP' ,
 BRANCH.[Name] As 'BranchName',
+BRANCH.U_SLD_VTAXID As 'TaxIdNum',
 BRANCH.U_SLD_VComName As 'PrintHeadr',
 BRANCH.U_SLD_F_VComName As 'PrintHdrF',
-BRANCH.U_SLD_VTAXID As 'TaxIdNum',
-BRANCH.U_SLD_Building As 'Building',
-BRANCH.U_SLD_Steet As 'Street',
-BRANCH.U_SLD_Block As 'Block',
-BRANCH.U_SLD_City As 'City',
-BRANCH.U_SLD_County As 'County',
+CASE WHEN OPQT.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_Building ELSE BRANCH.U_SLD_F_Building END AS 'Building',
+CASE WHEN OPQT.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_Steet  ELSE BRANCH.U_SLD_F_Steet  END AS 'Street',
+CASE WHEN OPQT.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_Block  ELSE BRANCH.U_SLD_F_Block   END AS 'Block',
+CASE WHEN OPQT.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_City  ELSE BRANCH.U_SLD_F_City  END As 'City',
+CASE WHEN OPQT.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_County ELSE BRANCH.U_SLD_F_County  END As 'County',
 BRANCH.U_SLD_ZipCode As 'ZipCode',
 BRANCH.U_SLD_Tel As 'Tel',
 BRANCH.U_SLD_Fax As 'BFax',
-OHEM.firstName,
-OHEM.lastName,
-OPRQ.DocEntry,
-OPRQ.docdate,
-NNM1.BeginStr, 
-OPRQ.DocNum,
-OPRQ.ReqName,
+BRANCH.U_SLD_Email AS 'E-Mail',
+'0' as LineTotal,
+opqt.VatSumFC,
+OPQT.DocTotalFC,
+OPQT.DocCur,
+'0' as TotalFrgn,
+OPQT.DocEntry,
+OPQT.[Address],
 OCRD.U_SLD_Title,
 OCRD.U_SLD_FullName,
-CASE WHEN CRD1.GlblLocNum IS NULL THEN ''
-  WHEN CRD1.GlblLocNum IS NOT NULL THEN N'สาขาที่ ' + CRD1.GlblLocNum
-  END 'GLN',
 CASE WHEN OCRD.Phone2 IS NULL THEN ''
   WHEN OCRD.Phone2 IS NOT NULL THEN ', ' + OCRD.Phone2
   END 'Phone2',
-OCRD.Phone1,
-ISNULL(OUDP.[Name],'') AS 'Department',
-(PRQ10.AftLineNum + 0.5) AS 'No.', 
-PRQ10.LineSeq as 'Line No.', 
-CAST(PRQ10.LineText as nvarchar (4000)) as 'Dscription', 
+OCRD.Phone1, 
+ISNULL(OCRD.Fax,'') AS 'Fax', 
+OCRD.LicTradNum,
+ISNULL(pqt12.GlbLocNumB,'') AS 'GlbLocNumB',
+ISNULL(NNM1.BeginStr,'') AS 'BeginStr', 
+OPQT.DocNum, 
+OPQT.DocDate, 
+OPQT.DocDueDate, 
+(PQT10.AftLineNum + 0.5) AS 'No.', 
+PQT10.LineSeq as 'Line No.', 
+'' as ItemCode, 
+CAST(PQT10.LineText as nvarchar (4000)) as 'Dscription', 
 '0' as Quantity, 
-'0' as LineTotal,
-'' as unitmsr,
-ISNULL(OPRQ.Comments,'') AS 'Comments',
-'0' as Available,
-OPRQ.ReqDate,
-'' as ItemCode,
-PRQ10.LineType,
-' ' AS new,
-PRQ1.Project,
-PRQ1.U_SLD_Dis_Amount
+'0' as Price, 
+'0' as TotalSumSy,
+'' as UomCode, 
+OPQT.VatSum, 
+OPQT.DocTotal,
+'' as unitMsr,
+PQT10.LineType,
+CONCAT(OCPR.FirstName,' ',OCPR.LastName) AS 'Coontact',
+pqt1.Project,
+ocrd.CntctPrsn,
+ocrd.E_Mail,
+ocrd.Phone1,
+ocrd.Phone2,
+pqt1.DiscPrcnt,
+pqt1.U_SLD_Dis_Amount,
+CAST(pqt12.StreetB AS nvarchar(max)) as StreetB, CAST(pqt12.StreetNoB AS nvarchar(max)) as StreetNoB,CAST(pqt12.BlockB AS nvarchar(max)) as BlockB, CAST(pqt12.BuildingB AS nvarchar(max)) as BuildingB, 
+CAST(pqt12.CityB AS nvarchar(max)) as CityB, pqt12.ZipCodeB, CAST(pqt12.CountyB AS nvarchar(max)) as CountyB, pqt12.StateB,
+opqt.cardcode
 
-FROM OPRQ
-INNER JOIN PRQ10 ON OPRQ.DocEntry = PRQ10.DocEntry
-LEFT JOIN OCRD ON OPRQ.CardCode = OCRD.CardCode 
-LEFT JOIN CRD1 ON OCRD.CardCode = CRD1.CardCode AND CRD1.AdresType = 'B' AND CRD1.[Address] = OPRQ.PayToCode
-LEFT JOIN NNM1 ON OPRQ.Series = NNM1.Series 
-LEFT JOIN OUDP ON OPRQ.Department = OUDP.Code
-LEFT JOIN OHEM ON OPRQ.Requester = OHEM.empID
-LEFT JOIN OHPS ON OHEM.position = OHPS.posID
-LEFT JOIN OBPL ON OPRQ.BPLId = OBPL.BPLId
---LEFT JOIN OITM ON PRQ1.ItemCode = OITM.ItemCode
---LEFT JOIN OWHS ON PRQ1.WhsCode = OWHS.WhsCode
---LEFT JOIN OITW ON PRQ1.ItemCode = OITW.ItemCode 
---LEFT JOIN OPRJ ON PRQ1.Project = OPRJ.PrjCode
-LEFT JOIN OUSR ON OPRQ.UserSign = OUSR.USERID
-LEFT JOIN [dbo].[@SLDT_SET_BRANCH] BRANCH ON OPRQ.U_SLD_LVatBranch = BRANCH.Code
-left join PRQ1 on OPRQ.DocEntry = PRQ1.DocEntry
+FROM OPQT 
+INNER JOIN PQT10 ON OPQT.DocEntry = PQT10.DocEntry 
+inner join pqt1 on opqt.DocEntry = PQT1.DocEntry
+inner join PQT12 on OPQT.DocEntry = PQT12.DocEntry
+LEFT JOIN OCRD ON OCRD.CardCode = OPQT.CardCode 
+LEFT JOIN OCPR ON OCRD.CardCode = OCPR.CardCode AND OPQT.cntctcode = OCPR.cntctcode
+LEFT JOIN CRD1 ON (OCRD.CardCode = CRD1.CardCode AND OPQT.PaytoCode = CRD1.[Address] AND  CRD1.AdresType ='B')
+LEFT JOIN NNM1 ON OPQT.Series = NNM1.Series
+LEFT JOIN OUSR ON OPQT.UserSign = OUSR.USERID
+--LEFT JOIN OPRJ ON PQT1.Project = OPRJ.PrjCode
+LEFT JOIN [dbo].[@SLDT_SET_BRANCH] BRANCH ON OPQT.U_SLD_LVatBranch = BRANCH.Code, OADM
 
-WHERE OPRQ.DocEntry  = {?DocKey@}
-
-GROUP BY
-BRANCH.[Name] ,
-BRANCH.U_SLD_VComName ,
-BRANCH.U_SLD_F_VComName ,
-BRANCH.U_SLD_VTAXID ,
-BRANCH.U_SLD_Building ,
-BRANCH.U_SLD_Steet,
-BRANCH.U_SLD_Block ,
-BRANCH.U_SLD_City ,
-BRANCH.U_SLD_County ,
-BRANCH.U_SLD_ZipCode ,
-BRANCH.U_SLD_Tel ,
-BRANCH.U_SLD_Fax ,
-OHEM.firstName,
-OHEM.lastName,
-OPRQ.DocEntry,
-OPRQ.docdate,
-NNM1.BeginStr, 
-OPRQ.DocNum,
-OPRQ.ReqName,
-OCRD.U_SLD_Title,
-OCRD.U_SLD_FullName,
-CASE WHEN CRD1.GlblLocNum IS NULL THEN ''
-  WHEN CRD1.GlblLocNum IS NOT NULL THEN N'สาขาที่ ' + CRD1.GlblLocNum
-  END ,
-CASE WHEN OCRD.Phone2 IS NULL THEN ''
-  WHEN OCRD.Phone2 IS NOT NULL THEN ', ' + OCRD.Phone2
-  END ,
-OCRD.Phone1,
-ISNULL(OUDP.[Name],'') ,
-(PRQ10.AftLineNum + 0.5) , 
-PRQ10.LineSeq,
-CAST(PRQ10.LineText as nvarchar (4000)) , 
-ISNULL(OPRQ.Comments,''),
---((SUM(OITW.OnHand)-SUM(OITW.IsCommited))+SUM(OITW.OnOrder)) AS 'Available',
-OPRQ.ReqDate,
-PRQ10.LineType,
-PRQ1.Project,
-PRQ1.U_SLD_Dis_Amount
-
+WHERE OPQT.DocEntry = {?DocKey@}
 Order by 'No.' , 'Line No.'

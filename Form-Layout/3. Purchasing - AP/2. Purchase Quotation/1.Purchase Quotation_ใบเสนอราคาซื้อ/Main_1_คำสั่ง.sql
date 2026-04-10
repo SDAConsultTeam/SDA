@@ -1,12 +1,4 @@
-﻿-- ============================================================
--- Report: 1.Purchase Quotation_ใบเสนอราคาซื้อ.rpt
-Path:   3. Purchasing - AP\2. Purchase Quotation\1.Purchase Quotation_ใบเสนอราคาซื้อ.rpt
-Extracted: 2026-04-09 15:22:43
--- Source: Main Report
--- Table:  คำสั่ง
--- ============================================================
-
-SELECT DISTINCT
+﻿SELECT DISTINCT
 BRANCH.Code ,
 CASE WHEN BRANCH.Code = '00000' AND OPQT.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่' 
   WHEN BRANCH.Code = '00000' AND OPQT.DocCur <> OADM.MainCurncy THEN 'Head office' 
@@ -66,11 +58,12 @@ PQT1.LineType,
 CONCAT(OCPR.FirstName,' ',OCPR.LastName) AS 'Coontact',
 pqt1.Project,
 ocrd.CntctPrsn,
-ocrd.MailAddres,
-ocrd.phone1,
-ocrd.phone2,
+ocrd.E_Mail,
+ocrd.Phone1,
+ocrd.Phone2,
 pqt1.DiscPrcnt,
 pqt1.U_SLD_Dis_Amount,
+PQT1.LineTotal,
 CAST(pqt12.StreetB AS nvarchar(max)) as StreetB, CAST(pqt12.StreetNoB AS nvarchar(max)) as StreetNoB,CAST(pqt12.BlockB AS nvarchar(max)) as BlockB, CAST(pqt12.BuildingB AS nvarchar(max)) as BuildingB, 
 CAST(pqt12.CityB AS nvarchar(max)) as CityB, pqt12.ZipCodeB, CAST(pqt12.CountyB AS nvarchar(max)) as CountyB, pqt12.StateB,
 opqt.cardcode
@@ -149,11 +142,12 @@ PQT10.LineType,
 CONCAT(OCPR.FirstName,' ',OCPR.LastName) AS 'Coontact',
 pqt1.Project,
 ocrd.CntctPrsn,
-ocrd.MailAddres,
-ocrd.phone1,
-ocrd.phone2,
+ocrd.E_Mail,
+ocrd.Phone1,
+ocrd.Phone2,
 pqt1.DiscPrcnt,
 pqt1.U_SLD_Dis_Amount,
+PQT1.LineTotal,
 CAST(pqt12.StreetB AS nvarchar(max)) as StreetB, CAST(pqt12.StreetNoB AS nvarchar(max)) as StreetNoB,CAST(pqt12.BlockB AS nvarchar(max)) as BlockB, CAST(pqt12.BuildingB AS nvarchar(max)) as BuildingB, 
 CAST(pqt12.CityB AS nvarchar(max)) as CityB, pqt12.ZipCodeB, CAST(pqt12.CountyB AS nvarchar(max)) as CountyB, pqt12.StateB,
 opqt.cardcode
