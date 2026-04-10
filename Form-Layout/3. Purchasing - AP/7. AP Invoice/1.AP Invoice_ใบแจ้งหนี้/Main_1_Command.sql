@@ -1,12 +1,4 @@
-﻿-- ============================================================
--- Report: 1.AP Invoice_ใบแจ้งหนี้.rpt
-Path:   3. Purchasing - AP\7. AP Invoice\1.AP Invoice_ใบแจ้งหนี้.rpt
-Extracted: 2026-04-09 15:22:45
--- Source: Main Report
--- Table:  Command
--- ============================================================
-
-SELECT DISTINCT
+﻿SELECT DISTINCT
 CONCAT(OCPR.FirstName,' ',OCPR.LastName) AS 'Coontact',
 BRANCH.Code ,
 CASE WHEN BRANCH.Code = '00000' AND OPCH.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่' 
@@ -78,10 +70,23 @@ PCH1.unitMsr,
 OPCH.Comments,
 OPCH.DpmAmnt,
 OPCH.DpmAmntFC,
-PCH1.LineType
+PCH1.LineType,
+PCH1.Project,
+OCPR.Name,
+OCPR.Tel1,
+OCPR.Tel2,
+OCPR.E_mailL,
+PCH12.StreetB,
+PCH12.StreetNoB,
+PCH12.BlockB,
+PCH12.CityB,
+PCH12.ZipCodeB,
+PCH12.CountyB,
+PCH12.CountryB
 
 FROM OPCH   
 INNER JOIN PCH1 ON OPCH.DocEntry = PCH1.DocEntry 
+INNER JOIN PCH12 ON OPCH.DocEntry = PCH12.DocEntry 
 LEFT JOIN OITM ON PCH1.ItemCode = OITM.ItemCode 
 LEFT JOIN OCRD ON OPCH.CardCode = OCRD.CardCode 
 LEFT JOIN CRD1 ON OCRD.CardCode = CRD1.CardCode 
@@ -169,10 +174,24 @@ OPCH.DocTotalFC,
 OPCH.Comments,
 OPCH.DpmAmnt,
 OPCH.DpmAmntFC,
-PCH10.LineType
+PCH10.LineType,
+PCH1.Project,
+OCPR.Name,
+OCPR.Tel1,
+OCPR.Tel2,
+OCPR.E_mailL,
+PCH12.StreetB,
+PCH12.StreetNoB,
+PCH12.BlockB,
+PCH12.CityB,
+PCH12.ZipCodeB,
+PCH12.CountyB,
+PCH12.CountryB
 
 FROM OPCH   
-INNER JOIN PCH10 ON OPCH.DocEntry = PCH10.DocEntry 
+INNER JOIN PCH1 ON OPCH.DocEntry = PCH1.DocEntry
+INNER JOIN PCH10 ON OPCH.DocEntry = PCH10.DocEntry
+INNER JOIN PCH12 ON OPCH.DocEntry = PCH12.DocEntry 
 --LEFT JOIN OITM ON PCH1.ItemCode = OITM.ItemCode 
 LEFT JOIN OCRD ON OPCH.CardCode = OCRD.CardCode 
 LEFT JOIN CRD1 ON OCRD.CardCode = CRD1.CardCode 

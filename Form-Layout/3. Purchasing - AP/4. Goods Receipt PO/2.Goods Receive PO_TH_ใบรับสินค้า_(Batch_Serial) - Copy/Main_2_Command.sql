@@ -1,12 +1,4 @@
-﻿-- ============================================================
--- Report: 2.Goods Receive PO_TH_ใบรับสินค้า_(Batch_Serial) - Copy.rpt
-Path:   3. Purchasing - AP\4. Goods Receipt PO\2.Goods Receive PO_TH_ใบรับสินค้า_(Batch_Serial) - Copy.rpt
-Extracted: 2026-04-09 15:22:44
--- Source: Main Report
--- Table:  Command
--- ============================================================
-
-select 
+﻿select 
 oadm.CompnyName,
 oadm.AliasName,
 oadm.Phone1,
