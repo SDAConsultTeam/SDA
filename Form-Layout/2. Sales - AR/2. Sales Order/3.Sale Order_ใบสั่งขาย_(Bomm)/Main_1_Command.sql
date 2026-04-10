@@ -1,12 +1,4 @@
-﻿-- ============================================================
--- Report: 3.Sale Order_ใบสั่งขาย_(Bomm).rpt
-Path:   3.Sale Order_ใบสั่งขาย_(Bomm).rpt
-Extracted: 2026-04-10 10:22:54
--- Source: Main Report
--- Table:  Command
--- ============================================================
-
-SELECT DISTINCT
+﻿SELECT DISTINCT
 case when OCPR.Cellolar is null then ''
   when OCPR.Cellolar is not null then OCPR.Cellolar
   END 'Phone2',
@@ -238,4 +230,3 @@ LEFT JOIN [dbo].[@SLDT_SET_BRANCH] BRANCH ON ORDR.U_SLD_LVatBranch = BRANCH.Code
 
 WHERE ORDR.DocEntry = {?DocKey@}
 Order by 'No.' , 'Line No.'
-
