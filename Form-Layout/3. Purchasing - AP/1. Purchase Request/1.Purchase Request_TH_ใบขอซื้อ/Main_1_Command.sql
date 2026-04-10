@@ -1,12 +1,4 @@
-﻿-- ============================================================
--- Report: 1.Purchase Request_TH_ใบขอซื้อ.rpt
-Path:   3. Purchasing - AP\1. Purchase Request\1.Purchase Request_TH_ใบขอซื้อ.rpt
-Extracted: 2026-04-09 15:22:43
--- Source: Main Report
--- Table:  Command
--- ============================================================
-
-SELECT DISTINCT
+﻿SELECT DISTINCT
 BRANCH.[Name] As 'BranchName',
 BRANCH.U_SLD_VComName As 'PrintHeadr',
 BRANCH.U_SLD_F_VComName As 'PrintHdrF',
@@ -41,6 +33,7 @@ PRQ1.LineNum as 'Line No.',
 PRQ1.Dscription as 'Dscription', 
 PRQ1.Quantity, 
 PRQ1.Price,
+PRQ1.LineTotal,
 PRQ1.unitmsr,
 ISNULL(OPRQ.Comments,'') AS 'Comments',
 ((SUM(OITW.OnHand)-SUM(OITW.IsCommited))+SUM(OITW.OnOrder)) AS 'Available',
@@ -104,6 +97,7 @@ PRQ1.LineNum,
 PRQ1.Dscription, 
 PRQ1.Quantity, 
 PRQ1.Price,
+PRQ1.LineTotal,
 PRQ1.unitmsr,
 OPRQ.Comments,
 OPRQ.ReqDate,
@@ -148,6 +142,7 @@ ISNULL(OUDP.[Name],'') AS 'Department',
 PRQ10.LineSeq as 'Line No.', 
 CAST(PRQ10.LineText as nvarchar (4000)) as 'Dscription', 
 '0' as Quantity, 
+'0' as LineTotal,
 '' as unitmsr,
 ISNULL(OPRQ.Comments,'') AS 'Comments',
 '0' as Available,
