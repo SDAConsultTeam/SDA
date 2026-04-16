@@ -77,7 +77,8 @@ OCPR.E_MailL AS ContactMail,
 OSLP.SlpName as 'Sale Name contact',
 OSLP.Mobil as 'Mobile',
 OSLP.Email as 'Email-Sale',
-OPRJ.PrjCode 
+OPRJ.PrjCode ,
+OUGP.UgpCode
 FROM ODLN 
 INNER JOIN DLN1 ON ODLN.DocEntry = DLN1.DocEntry 
 LEFT JOIN DLN12 ON ODLN.DocEntry = DLN12.DocEntry 
@@ -89,6 +90,7 @@ LEFT JOIN OCTG ON ODLN.GroupNum = OCTG.GroupNum
 LEFT JOIN OSLP ON ODLN.SlpCode = OSLP.SlpCode
 LEFT JOIN OPRJ ON DLN1.Project = OPRJ.PrjCode
 LEFT JOIN OUSR ON ODLN.UserSign = OUSR.USERID
+LEFT JOIN OUGP ON DLN1.UomCode = OUGP.UgpCode
 LEFT JOIN [dbo].[@SLDT_SET_BRANCH] BRANCH ON ODLN.U_SLD_LVatBranch = BRANCH.Code , oadm
 WHERE ODLN.DocEntry  = '{?DocKey@}'
 Union all
@@ -171,7 +173,8 @@ OCPR.E_MailL AS ContactMail,
 OSLP.SlpName as 'Sale Name contact',
 OSLP.Mobil as 'Mobile',
 OSLP.Email as 'Email-Sale',
-'' AS PrjCode
+'' AS PrjCode,
+'' AS UgpCode 
 FROM ODLN 
 INNER JOIN DLN10 ON ODLN.DocEntry = DLN10.DocEntry 
 LEFT JOIN DLN12 ON ODLN.DocEntry = DLN12.DocEntry 
