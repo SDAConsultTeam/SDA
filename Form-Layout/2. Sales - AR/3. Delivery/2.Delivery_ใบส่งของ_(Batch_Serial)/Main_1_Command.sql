@@ -72,7 +72,8 @@ OCTG.pymntgroup,
 OSLP.SlpName,
 ODLN.Comments,
 ODLN.NumAtCard,
-DLN1.LineType
+DLN1.LineType,
+OCPR.E_MailL AS ContactMail
 FROM ODLN 
 INNER JOIN DLN1 ON ODLN.DocEntry = DLN1.DocEntry 
 LEFT JOIN DLN12 ON ODLN.DocEntry = DLN12.DocEntry 
@@ -161,7 +162,8 @@ OCTG.pymntgroup,
 OSLP.SlpName,
 ODLN.Comments,
 ODLN.NumAtCard,
-DLN10.LineType
+DLN10.LineType,
+OCPR.E_MailL AS ContactMail
 FROM ODLN 
 INNER JOIN DLN10 ON ODLN.DocEntry = DLN10.DocEntry 
 LEFT JOIN DLN12 ON ODLN.DocEntry = DLN12.DocEntry 
