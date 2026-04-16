@@ -73,7 +73,8 @@ OSLP.SlpName,
 ODLN.Comments,
 ODLN.NumAtCard,
 DLN1.LineType,
-OCPR.E_MailL AS ContactMail
+OCPR.E_MailL AS ContactMail,
+OPRJ.PrjCode ,
 FROM ODLN 
 INNER JOIN DLN1 ON ODLN.DocEntry = DLN1.DocEntry 
 LEFT JOIN DLN12 ON ODLN.DocEntry = DLN12.DocEntry 
@@ -163,7 +164,8 @@ OSLP.SlpName,
 ODLN.Comments,
 ODLN.NumAtCard,
 DLN10.LineType,
-OCPR.E_MailL AS ContactMail
+OCPR.E_MailL AS ContactMail,
+'' AS PrjCode
 FROM ODLN 
 INNER JOIN DLN10 ON ODLN.DocEntry = DLN10.DocEntry 
 LEFT JOIN DLN12 ON ODLN.DocEntry = DLN12.DocEntry 
