@@ -74,6 +74,9 @@ ODLN.Comments,
 ODLN.NumAtCard,
 DLN1.LineType,
 OCPR.E_MailL AS ContactMail,
+OSLP.SlpName as 'Sale Name contact',
+OSLP.Mobil as 'Mobile',
+OSLP.Email as 'Email-Sale',
 OPRJ.PrjCode ,
 FROM ODLN 
 INNER JOIN DLN1 ON ODLN.DocEntry = DLN1.DocEntry 
@@ -165,6 +168,9 @@ ODLN.Comments,
 ODLN.NumAtCard,
 DLN10.LineType,
 OCPR.E_MailL AS ContactMail,
+OSLP.SlpName as 'Sale Name contact',
+OSLP.Mobil as 'Mobile',
+OSLP.Email as 'Email-Sale',
 '' AS PrjCode
 FROM ODLN 
 INNER JOIN DLN10 ON ODLN.DocEntry = DLN10.DocEntry 
