@@ -1,20 +1,5 @@
-﻿-- ============================================================
--- Report: 1.AR_Credit Memo_ใบลดหนี้ แก้ไขยอดเงิน.rpt
-Path:   2. Sales - AR\7. AR Credit Memo\1.AR_Credit Memo_ใบลดหนี้ แก้ไขยอดเงิน.rpt
-Extracted: 2026-04-09 15:22:40
--- Source: Subreport [Text]
--- Table:  Command
--- ============================================================
-
-SELECT Distinct
-ORIN.DocEntry,
-(RIN1.VisOrder+1) AS 'No.',
-CAST(RIN10.LineText AS NVARCHAR(2000)) AS'Text',
-RIN10.OrderNum
-
-FROM ORIN 
-LEFT JOIN RIN1 ON ORIN.DocEntry = RIN1.DocEntry
-LEFT JOIN RIN10 ON ORIN.DocEntry = RIN10.DocEntry AND RIN1.VisOrder = RIN10.AftLineNum
-
-ORDER BY RIN10.OrderNum
-
+SELECT
+    TOP 1 RIN10.LineText
+FROM RIN1
+INNER JOIN RIN10 ON RIN1.[DocEntry] = RIN10.[DocEntry] AND RIN10.AftLineNum = 0
+WHERE RIN1.[DocEntry] = {?DocKey@}

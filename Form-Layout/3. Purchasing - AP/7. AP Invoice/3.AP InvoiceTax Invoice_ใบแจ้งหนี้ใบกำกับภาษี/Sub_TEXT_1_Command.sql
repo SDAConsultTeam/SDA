@@ -1,20 +1,5 @@
-﻿-- ============================================================
--- Report: 3.AP InvoiceTax Invoice_ใบแจ้งหนี้ใบกำกับภาษี.rpt
-Path:   3. Purchasing - AP\7. AP Invoice\3.AP InvoiceTax Invoice_ใบแจ้งหนี้ใบกำกับภาษี.rpt
-Extracted: 2026-04-09 15:22:46
--- Source: Subreport [TEXT]
--- Table:  Command
--- ============================================================
-
-SELECT DISTINCT 
-OPCH.DocEntry,
-(PCH1.VisOrder+1) AS 'No.',
-CAST(PCH10.LineText AS NVARCHAR(200)) AS 'Text',
-PCH10.OrderNum
-
-
-FROM OPCH  
-LEFT JOIN PCH1 ON OPCH.DocEntry = PCH1.DocEntry 
-LEFT JOIN PCH10 ON OPCH.Docentry = PCH10.DocEntry AND PCH1.VisOrder = PCH10.AftLineNum
-
-ORDER BY PCH10.OrderNum
+SELECT
+    TOP 1 PCH10.LineText
+FROM PCH1
+INNER JOIN PCH10 ON PCH1.[DocEntry] = PCH10.[DocEntry] AND PCH10.AftLineNum = 0
+WHERE PCH1.[DocEntry] = {?DocKey@}

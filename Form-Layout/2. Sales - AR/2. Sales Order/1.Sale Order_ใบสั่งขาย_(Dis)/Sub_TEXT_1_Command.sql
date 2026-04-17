@@ -1,0 +1,5 @@
+SELECT
+    TOP 1 RDR10.LineText
+FROM RDR1
+INNER JOIN RDR10 ON RDR1.[DocEntry] = RDR10.[DocEntry] AND RDR10.AftLineNum = 0
+WHERE RDR1.[DocEntry] = {?DocKey@}

@@ -1,20 +1,5 @@
-﻿-- ============================================================
--- Report: 4.AR InvoiceTax Invoice_ใบแจ้งหนี้ใบกำกับภาษี.rpt
-Path:   2. Sales - AR\6. AR Invoice\4.AR InvoiceTax Invoice_ใบแจ้งหนี้ใบกำกับภาษี.rpt
-Extracted: 2026-04-09 15:22:38
--- Source: Subreport [Text]
--- Table:  Command
--- ============================================================
-
-SELECT Distinct
-OINV.DocEntry,
-(INV1.VisOrder+1) AS 'No.',
-CAST(INV10.LineText as NVARCHAR(2000)) AS 'Text',
-INV10.OrderNum
-
-FROM OINV
-LEFT JOIN INV1 ON OINV.DocEntry = INV1.DocEntry
-LEFT JOIN INV10 ON OINV.DocEntry = INV10.DocEntry AND INV1.VisOrder = INV10.AftLineNum
-
-ORDER BY INV10.OrderNum
-
+SELECT
+    TOP 1 INV10.LineText
+FROM INV1
+INNER JOIN INV10 ON INV1.[DocEntry] = INV10.[DocEntry] AND INV10.AftLineNum = 0
+WHERE INV1.[DocEntry] = {?DocKey@}
