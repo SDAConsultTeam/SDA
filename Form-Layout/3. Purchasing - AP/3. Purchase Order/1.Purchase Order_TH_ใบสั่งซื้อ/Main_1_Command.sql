@@ -1,21 +1,35 @@
-﻿SELECT DISTINCT
-CASE WHEN BRANCH.Code = '00000' AND OPOR.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่'
-  WHEN BRANCH.Code = '00000' AND OPOR.DocCur <> OADM.MainCurncy THEN 'Head office'
-  WHEN BRANCH.Code <> '00000' AND OPOR.DocCur = OADM.MainCurncy THEN concat(N'สาขาที่' ,' ',BRANCH.Code)
-  WHEN BRANCH.Code <> '00000' AND OPOR.DocCur <> OADM.MainCurncy THEN concat('Branch' ,' ',BRANCH.Code)
+﻿SELECT DISTINCT 
+BRANCH.Code ,
+CASE WHEN BRANCH.Code = '00000' AND OPOR.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่' 
+  WHEN BRANCH.Code = '00000' AND OPOR.DocCur <> OADM.MainCurncy THEN 'Head office' 
+  WHEN BRANCH.Code <> '00000' AND OPOR.DocCur = OADM.MainCurncy THEN concat(N'สาขาที่' ,' ',BRANCH.Code) 
+  WHEN BRANCH.Code <> '00000' AND OPOR.DocCur <> OADM.MainCurncy THEN concat('Branch' ,' ',BRANCH.Code) 
 END 'GLN_H' ,
-CASE WHEN CRD1.GlblLocNum = '00000' AND OPOR.DocCur = OADM.MainCurncy THEN N'(สำนักงานใหญ่)'
-  WHEN CRD1.GlblLocNum = '00000' AND OPOR.DocCur <> OADM.MainCurncy THEN '(Head office)'
-  WHEN CRD1.GlblLocNum <> '00000' AND OPOR.DocCur = OADM.MainCurncy THEN concat(N'(สาขาที่' ,' ',CRD1.GlblLocNum,')')
-  WHEN CRD1.GlblLocNum <> '00000' AND OPOR.DocCur <> OADM.MainCurncy THEN concat('(Branch' ,' ',CRD1.GlblLocNum,')')
+CASE WHEN CRD1.GlblLocNum = '00000' AND OPOR.DocCur = OADM.MainCurncy THEN N'(สำนักงานใหญ่)' 
+  WHEN CRD1.GlblLocNum = '00000' AND OPOR.DocCur <> OADM.MainCurncy THEN '(Head office)' 
+  WHEN CRD1.GlblLocNum <> '00000' AND OPOR.DocCur = OADM.MainCurncy THEN concat(N'(สาขาที่' ,' ',CRD1.GlblLocNum,')') 
+  WHEN CRD1.GlblLocNum <> '00000' AND OPOR.DocCur <> OADM.MainCurncy THEN concat('(Branch' ,' ',CRD1.GlblLocNum,')') 
   when CRD1.GlblLocNum = '' or CRD1.GlblLocNum is null then ''
 END 'GLN_BP' ,
- CASE
+ CASE 
  WHEN OPOR.Printed = 'N' AND OPOR.DocCur <> OADM.MainCurncy THEN 'Original'
- WHEN OPOR.Printed = 'N' AND OPOR.DocCur = OADM.MainCurncy THEN N'ต้นฉบับ'
- WHEN OPOR.Printed = 'Y' AND OPOR.DocCur <> OADM.MainCurncy THEN 'Copy'
+ WHEN OPOR.Printed = 'N' AND OPOR.DocCur = OADM.MainCurncy THEN N'ต้นฉบับ' 
+ WHEN OPOR.Printed = 'Y' AND OPOR.DocCur <> OADM.MainCurncy THEN 'Copy'  
  WHEN OPOR.Printed = 'Y' AND OPOR.DocCur = OADM.MainCurncy THEN N'สำเนา'
  END AS 'Print Status',
+BRANCH.[Name] As 'BranchName',
+BRANCH.U_SLD_VTAXID As 'TaxIdNum',
+CAST(BRANCH.U_SLD_VComName AS nvarchar(max)) As 'PrintHeadr',
+CAST(BRANCH.U_SLD_F_VComName AS nvarchar(max)) As 'PrintHdrF',
+CAST(CASE WHEN OPOR.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_Building ELSE BRANCH.U_SLD_F_Building END AS nvarchar(max)) AS 'Building',
+CAST(CASE WHEN OPOR.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_Steet  ELSE BRANCH.U_SLD_F_Steet  END AS nvarchar(max)) AS 'Street',
+CAST(CASE WHEN OPOR.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_Block  ELSE BRANCH.U_SLD_F_Block   END AS nvarchar(max)) AS 'Block',
+CAST(CASE WHEN OPOR.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_City  ELSE BRANCH.U_SLD_F_City  END AS nvarchar(max)) As 'City',
+CAST(CASE WHEN OPOR.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_County ELSE BRANCH.U_SLD_F_County  END AS nvarchar(max)) As 'County',
+BRANCH.U_SLD_ZipCode As 'ZipCode',
+BRANCH.U_SLD_Tel As 'Tel',
+BRANCH.U_SLD_Fax As 'BFax',
+BRANCH.U_SLD_Email AS 'E-Mail',
 OPOR.DocEntry,
 CAST(OPOR.Address2 AS nvarchar(max)) AS 'Address2', 
 CAST(OPOR.[Address] AS nvarchar(max)) AS 'Address',
@@ -66,8 +80,7 @@ OCPR.Tel1,
 OCPR.E_MailL
 
 FROM OPOR   
-INNER JOIN POR1 ON OPOR.DocEntry = POR1.DocEntry 
-INNER JOIN POR12 ON OPOR.DocEntry = POR12.DocEntry 
+INNER JOIN POR1 ON OPOR.DocEntry = POR1.DocEntry  
 LEFT JOIN OITM ON POR1.ItemCode = OITM.ItemCode 
 LEFT JOIN OCRD ON OPOR.CardCode = OCRD.CardCode 
 LEFT JOIN CRD1 ON (OPOR.[PaytoCode] = CRD1.[Address] AND OPOR.CardCode = CRD1.CardCode and CRD1.AdresType = 'B')
@@ -80,5 +93,5 @@ LEFT JOIN POR12 ON OPOR.DocEntry = POR12.DocEntry
 LEFT JOIN OUSR ON OPOR.UserSign = OUSR.USERID
 LEFT JOIN OPRJ ON POR1.Project = OPRJ.PrjCode
 LEFT JOIN [dbo].[@SLDT_SET_BRANCH] BRANCH ON OPOR.U_SLD_LVatBranch = BRANCH.Code, oadm
-WHERE OPOR.DocEntry = 9
+WHERE OPOR.DocEntry = {?DocEntry@}
 ORDER BY 'No.' , 'Line No.'
