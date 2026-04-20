@@ -1,28 +1,21 @@
 ﻿SELECT DISTINCT
-BRANCH.Code ,
-CASE WHEN BRANCH.Code = '00000' AND OPRQ.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่' 
-  WHEN BRANCH.Code = '00000' AND OPRQ.DocCur <> OADM.MainCurncy THEN 'Head office' 
-  WHEN BRANCH.Code <> '00000' AND OPRQ.DocCur = OADM.MainCurncy THEN concat(N'สาขาที่' ,' ',BRANCH.Code) 
-  WHEN BRANCH.Code <> '00000' AND OPRQ.DocCur <> OADM.MainCurncy THEN concat('Branch' ,' ',BRANCH.Code) 
+CASE WHEN BRANCH.Code = '00000' AND OPRQ.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่'
+  WHEN BRANCH.Code = '00000' AND OPRQ.DocCur <> OADM.MainCurncy THEN 'Head office'
+  WHEN BRANCH.Code <> '00000' AND OPRQ.DocCur = OADM.MainCurncy THEN concat(N'สาขาที่' ,' ',BRANCH.Code)
+  WHEN BRANCH.Code <> '00000' AND OPRQ.DocCur <> OADM.MainCurncy THEN concat('Branch' ,' ',BRANCH.Code)
 END 'GLN_H' ,
-CASE WHEN CRD1.GlblLocNum = '00000' AND OPRQ.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่' 
-  WHEN CRD1.GlblLocNum = '00000' AND OPRQ.DocCur <> OADM.MainCurncy THEN 'Head office' 
-  WHEN CRD1.GlblLocNum <> '00000' AND OPRQ.DocCur = OADM.MainCurncy THEN concat(N'สาขาที่' ,' ',CRD1.GlblLocNum) 
-  WHEN CRD1.GlblLocNum <> '00000' AND OPRQ.DocCur <> OADM.MainCurncy THEN concat('Branch' ,' ',CRD1.GlblLocNum) 
+CASE WHEN CRD1.GlblLocNum = '00000' AND OPRQ.DocCur = OADM.MainCurncy THEN N'(สำนักงานใหญ่)'
+  WHEN CRD1.GlblLocNum = '00000' AND OPRQ.DocCur <> OADM.MainCurncy THEN '(Head office)'
+  WHEN CRD1.GlblLocNum <> '00000' AND OPRQ.DocCur = OADM.MainCurncy THEN concat(N'(สาขาที่' ,' ',CRD1.GlblLocNum,')')
+  WHEN CRD1.GlblLocNum <> '00000' AND OPRQ.DocCur <> OADM.MainCurncy THEN concat('(Branch' ,' ',CRD1.GlblLocNum,')')
+  when CRD1.GlblLocNum = '' or CRD1.GlblLocNum is null then ''
 END 'GLN_BP' ,
-BRANCH.[Name] As 'BranchName',
-BRANCH.U_SLD_VTAXID As 'TaxIdNum',
-BRANCH.U_SLD_VComName As 'PrintHeadr',
-BRANCH.U_SLD_F_VComName As 'PrintHdrF',
-CASE WHEN OPRQ.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_Building ELSE BRANCH.U_SLD_F_Building END AS 'Building',
-CASE WHEN OPRQ.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_Steet  ELSE BRANCH.U_SLD_F_Steet  END AS 'Street',
-CASE WHEN OPRQ.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_Block  ELSE BRANCH.U_SLD_F_Block   END AS 'Block',
-CASE WHEN OPRQ.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_City  ELSE BRANCH.U_SLD_F_City  END As 'City',
-CASE WHEN OPRQ.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_County ELSE BRANCH.U_SLD_F_County  END As 'County',
-BRANCH.U_SLD_ZipCode As 'ZipCode',
-BRANCH.U_SLD_Tel As 'Tel',
-BRANCH.U_SLD_Fax As 'BFax',
-BRANCH.U_SLD_Email AS 'E-Mail',
+ CASE
+ WHEN OPRQ.Printed = 'N' AND OPRQ.DocCur <> OADM.MainCurncy THEN 'Original'
+ WHEN OPRQ.Printed = 'N' AND OPRQ.DocCur = OADM.MainCurncy THEN N'ต้นฉบับ'
+ WHEN OPRQ.Printed = 'Y' AND OPRQ.DocCur <> OADM.MainCurncy THEN 'Copy'
+ WHEN OPRQ.Printed = 'Y' AND OPRQ.DocCur = OADM.MainCurncy THEN N'สำเนา'
+ END AS 'Print Status',
 CASE WHEN OPRQ.DocCur = 'THB' THEN PRQ1.LineTotal ELSE PRQ1.TotalFrgn END AS 'LineTotal',
 OPRQ.DocCur,
 OPRQ.DocEntry,

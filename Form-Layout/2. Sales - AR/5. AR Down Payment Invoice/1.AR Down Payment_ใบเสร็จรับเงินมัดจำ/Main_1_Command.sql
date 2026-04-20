@@ -11,38 +11,23 @@ case when OCRD.Phone2 is null then ''
   when OCRD.Phone2 is not null then ', ' + OCRD.Phone2
   END 'Phone2',
 CONCAT(OCPR.FirstName,' ',OCPR.LastName) AS 'Coontact',
-BRANCH.Code ,
-CASE WHEN BRANCH.Code = '00000' AND ODPI.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่' 
-  WHEN BRANCH.Code = '00000' AND ODPI.DocCur <> OADM.MainCurncy THEN 'Head office' 
-  WHEN BRANCH.Code <> '00000' AND ODPI.DocCur = OADM.MainCurncy THEN concat(N'สาขาที่' ,' ',BRANCH.Code) 
-  WHEN BRANCH.Code <> '00000' AND ODPI.DocCur <> OADM.MainCurncy THEN concat('Branch' ,' ',BRANCH.Code) 
+CASE WHEN BRANCH.Code = '00000' AND ODPI.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่'
+  WHEN BRANCH.Code = '00000' AND ODPI.DocCur <> OADM.MainCurncy THEN 'Head office'
+  WHEN BRANCH.Code <> '00000' AND ODPI.DocCur = OADM.MainCurncy THEN concat(N'สาขาที่' ,' ',BRANCH.Code)
+  WHEN BRANCH.Code <> '00000' AND ODPI.DocCur <> OADM.MainCurncy THEN concat('Branch' ,' ',BRANCH.Code)
 END 'GLN_H' ,
-CASE WHEN CRD1.GlblLocNum = '00000' AND ODPI.DocCur = OADM.MainCurncy THEN N'(สำนักงานใหญ่)' 
-  WHEN CRD1.GlblLocNum = '00000' AND ODPI.DocCur <> OADM.MainCurncy THEN '(Head office)' 
-  WHEN CRD1.GlblLocNum <> '00000' AND ODPI.DocCur = OADM.MainCurncy THEN concat(N'(สาขาที่' ,' ',CRD1.GlblLocNum,')') 
-  WHEN CRD1.GlblLocNum <> '00000' AND ODPI.DocCur <> OADM.MainCurncy THEN concat('(Branch' ,' ',CRD1.GlblLocNum,')') 
+CASE WHEN CRD1.GlblLocNum = '00000' AND ODPI.DocCur = OADM.MainCurncy THEN N'(สำนักงานใหญ่)'
+  WHEN CRD1.GlblLocNum = '00000' AND ODPI.DocCur <> OADM.MainCurncy THEN '(Head office)'
+  WHEN CRD1.GlblLocNum <> '00000' AND ODPI.DocCur = OADM.MainCurncy THEN concat(N'(สาขาที่' ,' ',CRD1.GlblLocNum,')')
+  WHEN CRD1.GlblLocNum <> '00000' AND ODPI.DocCur <> OADM.MainCurncy THEN concat('(Branch' ,' ',CRD1.GlblLocNum,')')
   when CRD1.GlblLocNum = '' or CRD1.GlblLocNum is null then ''
 END 'GLN_BP' ,
- CASE 
+ CASE
  WHEN ODPI.Printed = 'N' AND ODPI.DocCur <> OADM.MainCurncy THEN 'Original'
- WHEN ODPI.Printed = 'N' AND ODPI.DocCur = OADM.MainCurncy THEN N'ต้นฉบับ' 
- WHEN ODPI.Printed = 'Y' AND ODPI.DocCur <> OADM.MainCurncy THEN 'Copy'  
+ WHEN ODPI.Printed = 'N' AND ODPI.DocCur = OADM.MainCurncy THEN N'ต้นฉบับ'
+ WHEN ODPI.Printed = 'Y' AND ODPI.DocCur <> OADM.MainCurncy THEN 'Copy'
  WHEN ODPI.Printed = 'Y' AND ODPI.DocCur = OADM.MainCurncy THEN N'สำเนา'
  END AS 'Print Status',
-BRANCH.[Name] As 'BranchName',
-BRANCH.U_SLD_VTAXID As 'TaxIdNum',
-BRANCH.U_SLD_VComName As 'PrintHeadr',
-BRANCH.U_SLD_F_VComName As 'PrintHdrF',
-CASE WHEN ODPI.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_Building ELSE BRANCH.U_SLD_F_Building END AS 'Building',
-CASE WHEN ODPI.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_Steet  ELSE BRANCH.U_SLD_F_Steet  END AS 'Street',
-CASE WHEN ODPI.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_Block  ELSE BRANCH.U_SLD_F_Block   END AS 'Block',
-CASE WHEN ODPI.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_City  ELSE BRANCH.U_SLD_F_City  END As 'City',
-CASE WHEN ODPI.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_County ELSE BRANCH.U_SLD_F_County  END As 'County',
-BRANCH.U_SLD_ZipCode As 'ZipCode',
-BRANCH.U_SLD_Tel As 'Tel',
-BRANCH.U_SLD_Fax As 'BFax',
-BRANCH.U_SLD_Email AS 'E-Mail',
---------------------------------------------------------------------------------------------------------
 NNM1.BeginStr,
 ODPI.DocEntry,
 ODPI.DocNum,
@@ -102,38 +87,23 @@ WHERE ODPI.DocEntry  = {?DocKey@}
 
 GROUP BY
 CONCAT(OCPR.FirstName,' ',OCPR.LastName) ,
-BRANCH.Code ,
-CASE WHEN BRANCH.Code = '00000' AND ODPI.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่' 
-  WHEN BRANCH.Code = '00000' AND ODPI.DocCur <> OADM.MainCurncy THEN 'Head office' 
-  WHEN BRANCH.Code <> '00000' AND ODPI.DocCur = OADM.MainCurncy THEN concat(N'สาขาที่' ,' ',BRANCH.Code) 
-  WHEN BRANCH.Code <> '00000' AND ODPI.DocCur <> OADM.MainCurncy THEN concat('Branch' ,' ',BRANCH.Code) 
+CASE WHEN BRANCH.Code = '00000' AND ODPI.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่'
+  WHEN BRANCH.Code = '00000' AND ODPI.DocCur <> OADM.MainCurncy THEN 'Head office'
+  WHEN BRANCH.Code <> '00000' AND ODPI.DocCur = OADM.MainCurncy THEN concat(N'สาขาที่' ,' ',BRANCH.Code)
+  WHEN BRANCH.Code <> '00000' AND ODPI.DocCur <> OADM.MainCurncy THEN concat('Branch' ,' ',BRANCH.Code)
 END  ,
-CASE WHEN CRD1.GlblLocNum = '00000' AND ODPI.DocCur = OADM.MainCurncy THEN N'(สำนักงานใหญ่)' 
-  WHEN CRD1.GlblLocNum = '00000' AND ODPI.DocCur <> OADM.MainCurncy THEN '(Head office)' 
-  WHEN CRD1.GlblLocNum <> '00000' AND ODPI.DocCur = OADM.MainCurncy THEN concat(N'(สาขาที่' ,' ',CRD1.GlblLocNum,')') 
-  WHEN CRD1.GlblLocNum <> '00000' AND ODPI.DocCur <> OADM.MainCurncy THEN concat('(Branch' ,' ',CRD1.GlblLocNum,')') 
+CASE WHEN CRD1.GlblLocNum = '00000' AND ODPI.DocCur = OADM.MainCurncy THEN N'(สำนักงานใหญ่)'
+  WHEN CRD1.GlblLocNum = '00000' AND ODPI.DocCur <> OADM.MainCurncy THEN '(Head office)'
+  WHEN CRD1.GlblLocNum <> '00000' AND ODPI.DocCur = OADM.MainCurncy THEN concat(N'(สาขาที่' ,' ',CRD1.GlblLocNum,')')
+  WHEN CRD1.GlblLocNum <> '00000' AND ODPI.DocCur <> OADM.MainCurncy THEN concat('(Branch' ,' ',CRD1.GlblLocNum,')')
   when CRD1.GlblLocNum = '' or CRD1.GlblLocNum is null then ''
 END  ,
- CASE 
+ CASE
  WHEN ODPI.Printed = 'N' AND ODPI.DocCur <> OADM.MainCurncy THEN 'Original'
- WHEN ODPI.Printed = 'N' AND ODPI.DocCur = OADM.MainCurncy THEN N'ต้นฉบับ' 
- WHEN ODPI.Printed = 'Y' AND ODPI.DocCur <> OADM.MainCurncy THEN 'Copy'  
+ WHEN ODPI.Printed = 'N' AND ODPI.DocCur = OADM.MainCurncy THEN N'ต้นฉบับ'
+ WHEN ODPI.Printed = 'Y' AND ODPI.DocCur <> OADM.MainCurncy THEN 'Copy'
  WHEN ODPI.Printed = 'Y' AND ODPI.DocCur = OADM.MainCurncy THEN N'สำเนา'
  END ,
-BRANCH.[Name] ,
-BRANCH.U_SLD_VTAXID ,
-BRANCH.U_SLD_VComName ,
-BRANCH.U_SLD_F_VComName ,
-CASE WHEN ODPI.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_Building ELSE BRANCH.U_SLD_F_Building END ,
-CASE WHEN ODPI.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_Steet  ELSE BRANCH.U_SLD_F_Steet  END ,
-CASE WHEN ODPI.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_Block  ELSE BRANCH.U_SLD_F_Block   END ,
-CASE WHEN ODPI.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_City  ELSE BRANCH.U_SLD_F_City  END ,
-CASE WHEN ODPI.DocCur = OADM.MainCurncy THEN BRANCH.U_SLD_County ELSE BRANCH.U_SLD_F_County  END ,
-BRANCH.U_SLD_ZipCode ,
-BRANCH.U_SLD_Tel ,
-BRANCH.U_SLD_Fax ,
-BRANCH.U_SLD_Email ,
---------------------------------------------------------------------------------------------------------
 NNM1.BeginStr,
 ODPI.DocEntry,
 ODPI.DocNum,

@@ -10,6 +10,9 @@ declare @dateFrom datetime set @dateFrom = '20210131'--{?DateFrom}
 declare @dateTo datetime set @dateTo = '20211231'--{?DateTo}
 
 select distinct [@SLDT_SET_BRANCH].U_SLD_VComName
+,CASE WHEN BRANCH.Code = '00000' THEN N'สำนักงานใหญ่'
+     WHEN BRANCH.Code <> '00000' THEN concat(N'สาขาที่', ' ', BRANCH.Code)
+END 'GLN_H'
 ,year(@dateFrom) 'Yearfrom',year(@dateTo) 'YearTo'
 ,case when Month(@dateFrom) = '1' then N'มกราคม' 
  when Month(@dateFrom) = '2' then N'กุมภาพันธ์' 
@@ -108,8 +111,8 @@ LEFT JOIN ITM7 ON T0.ItemCode = ITM7.ItemCode
  ) Fprice on Fprice.ItemCode = T0.ItemCode 
  ) FixPrice on FixPrice.itemcode = T0.ItemCode
 
-, [@SLDT_SET_BRANCH]
+, [@SLDT_SET_BRANCH] BRANCH
 
-WHERE T0.ItemType = 'F' --Type Fixed Assets 
+WHERE T0.ItemType = 'F' --Type Fixed Assets
 and  (Retire.DocStatus is not null or Retire.DocStatus = 'P')  and Retire.DocType = 'NC' 
 --and T0.ItemCode = 'FAOE22019060001'
