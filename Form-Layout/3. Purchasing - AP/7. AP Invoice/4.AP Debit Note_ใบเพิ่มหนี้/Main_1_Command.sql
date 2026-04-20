@@ -54,19 +54,38 @@ SUM(CASE WHEN OPCH.DocCur = 'THB' THEN PCH1.LineTotal ELSE PCH1.TotalFrgn END) O
 PCH1.unitMsr,
 OPCH.Comments,
 CASE WHEN OPCH.DocCur = 'THB' THEN OPCH.DpmAmnt ELSE OPCH.DpmAmntFC END AS 'DpmAmnt',
-CASE WHEN OPCH.U_DB_02 IS not NULL THEN ''
-  WHEN OPCH.U_DB_02 IS NULL THEN T10.[Name]
-  END 'Reason_DB',
-CASE WHEN OPCH.U_DB_02 IS NULL THEN ''
-  WHEN OPCH.U_DB_02 IS NOT NULL THEN N'เพิ่มหนี้เนื่องจาก' + OPCH.U_DB_02
-  END 'Reason_DB_Remark',
-OPCH.U_CN_01,
-OPCH.U_CN_02,
-OPCH.U_CN_03,
-opch.Printed
+--CASE WHEN OPCH.U_DB_02 IS not NULL THEN ''
+  --WHEN OPCH.U_DB_02 IS NULL THEN T10.[Name]
+  --END 'Reason_DB',
+--CASE WHEN OPCH.U_DB_02 IS NULL THEN ''
+  --WHEN OPCH.U_DB_02 IS NOT NULL THEN N'เพิ่มหนี้เนื่องจาก' + OPCH.U_DB_02
+  --END 'Reason_DB_Remark',
+--OPCH.U_CN_01,
+--OPCH.U_CN_02,
+--OPCH.U_CN_03,
+opch.Printed,
+PCH1.Project,
+OCPR.Name,
+OCPR.Tel1,
+OCPR.E_MailL,
+PCH12.StreetB,
+PCH12.StreetNoB,
+PCH12.BlockB,
+PCH12.CityB,
+PCH12.ZipCodeB,
+PCH12.CountyB,
+PCH12.CountryB,
+ISNULL(Ref_N1.BeginStr, '')                 AS 'Ref_BeginStr',
+COALESCE(Ref_OPDN.DocNum, Ref_OPOR.DocNum)  AS 'Ref_DocNum',
+COALESCE(Ref_OPDN.DocDate, Ref_OPOR.DocDate) AS 'Ref_DocDate',
+CASE WHEN OPCH.DocCur = 'THB'
+     THEN COALESCE(Ref_OPDN.DocTotal, Ref_OPOR.DocTotal)
+     ELSE COALESCE(Ref_OPDN.DocTotalFC, Ref_OPOR.DocTotalFC)
+END                                          AS 'Ref_DocTotal'
 
 FROM OPCH   
 INNER JOIN PCH1 ON OPCH.DocEntry = PCH1.DocEntry 
+INNER JOIN PCH12 ON OPCH.DocEntry = PCH12.DocEntry 
 LEFT JOIN OITM ON PCH1.ItemCode = OITM.ItemCode 
 LEFT JOIN OCRD ON OPCH.CardCode = OCRD.CardCode 
 LEFT JOIN CRD1 ON OCRD.CardCode = CRD1.CardCode 
@@ -78,8 +97,15 @@ LEFT JOIN CRD1 CRD ON (OPCH.PaytoCode = CRD.[Address] AND OPCH.CardCode = CRD.Ca
 LEFT JOIN OPRJ ON PCH1.Project = OPRJ.PrjCode
 LEFT JOIN OUSR ON OPCH.UserSign = OUSR.USERID
 LEFT JOIN OSLP ON OPCH.SlpCode = OSLP.SlpCode
-LEFT JOIN [dbo].[@SLD_REASON_DBNOTE] T10 ON OPCH.U_DB_01 = T10.code
-LEFT JOIN [dbo].[@SLDT_SET_BRANCH] BRANCH ON OPCH.U_SLD_LVatBranch = BRANCH.Code , oadm
+--LEFT JOIN [dbo].[@SLD_REASON_DBNOTE] T10 ON OPCH.U_DB_01 = T10.code
+LEFT JOIN [dbo].[@SLDT_SET_BRANCH] BRANCH ON OPCH.U_SLD_LVatBranch = BRANCH.Code
+LEFT JOIN OPDN Ref_OPDN ON PCH1.BaseEntry = Ref_OPDN.DocEntry 
+                        AND PCH1.BaseType  = 20   -- GRPO
+LEFT JOIN NNM1 Ref_N1   ON Ref_OPDN.Series = Ref_N1.Series
+LEFT JOIN OPOR Ref_OPOR ON PCH1.BaseEntry = Ref_OPOR.DocEntry 
+                        AND PCH1.BaseType  = 22   -- Purchase Order
+LEFT JOIN NNM1 Ref_N2   ON Ref_OPOR.Series = Ref_N2.Series
+, oadm
 
-WHERE OPCH.DocEntry = 1
+WHERE OPCH.DocEntry = {?DocKey@}
 Order by 'No.' , 'Line No.'

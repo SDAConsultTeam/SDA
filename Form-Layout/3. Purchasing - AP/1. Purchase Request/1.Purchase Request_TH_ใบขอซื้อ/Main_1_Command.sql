@@ -17,6 +17,8 @@ END 'GLN_BP' ,
  WHEN OPRQ.Printed = 'Y' AND OPRQ.DocCur = OADM.MainCurncy THEN N'สำเนา'
  END AS 'Print Status',
 CASE WHEN OPRQ.DocCur = 'THB' THEN PRQ1.LineTotal ELSE PRQ1.TotalFrgn END AS 'LineTotal',
+OHEM.firstName,
+OHEM.lastName,
 OPRQ.DocCur,
 OPRQ.DocEntry,
 OPRQ.[Address],
@@ -57,7 +59,6 @@ PRQ1.U_SLD_Dis_Amount,
 CAST(PRQ12.StreetB AS nvarchar(max)) as StreetB, CAST(PRQ12.StreetNoB AS nvarchar(max)) as StreetNoB,CAST(PRQ12.BlockB AS nvarchar(max)) as BlockB, CAST(PRQ12.BuildingB AS nvarchar(max)) as BuildingB, 
 CAST(PRQ12.CityB AS nvarchar(max)) as CityB, PRQ12.ZipCodeB, CAST(PRQ12.CountyB AS nvarchar(max)) as CountyB, PRQ12.StateB,
 OPRQ.cardcode
-
 FROM OPRQ 
 INNER JOIN PRQ1 ON OPRQ.DocEntry = PRQ1.DocEntry
 left join PRQ12 on OPRQ.DocEntry = PRQ12.DocEntry
@@ -68,6 +69,6 @@ LEFT JOIN NNM1 ON OPRQ.Series = NNM1.Series
 LEFT JOIN OUSR ON OPRQ.UserSign = OUSR.USERID
 LEFT JOIN OPRJ ON PRQ1.Project = OPRJ.PrjCode
 LEFT JOIN [dbo].[@SLDT_SET_BRANCH] BRANCH ON OPRQ.U_SLD_LVatBranch = BRANCH.Code, OADM
-
+LEFT JOIN OHEM ON (SELECT CASE WHEN ReqType = '12' THEN UserSign ELSE Requester END FROM OPRQ WHERE DocEntry  = {?DocKey@}) = OHEM.empID
 WHERE OPRQ.DocEntry = {?DocKey@}
 Order by 'No.' , 'Line No.'
