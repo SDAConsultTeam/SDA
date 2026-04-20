@@ -34,7 +34,6 @@ BRANCH.U_SLD_Tel As 'Tel',
 BRANCH.U_SLD_Fax As 'BFax',
 BRANCH.U_SLD_Email AS 'E-Mail',
 OJDT.FcTotal,
---------------------------------------------------------------------------------------------------------
 OJDT.[Series], 
 OJDT.[Ref1], 
 OJDT.[Memo], 
