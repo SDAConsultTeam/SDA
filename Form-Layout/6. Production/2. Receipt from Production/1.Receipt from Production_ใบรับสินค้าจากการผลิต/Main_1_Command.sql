@@ -26,21 +26,11 @@ IGN1.Quantity,
 IGN1.UomCode,
 IGN1.WhsCode,
 OIGN.Comments,
-BRANCH.Code as 'BranchCode' ,
-BRANCH.Name As 'BranchName',
-BRANCH.U_SLD_VComName As 'PrintHeadr',
-BRANCH.U_SLD_F_VComName As 'PrintHdrF',
-BRANCH.U_SLD_VTAXID As 'TaxIdNum',
-BRANCH.U_SLD_Building As 'Building',
-BRANCH.U_SLD_Steet As 'Street',
-BRANCH.U_SLD_Block As 'Block',
-BRANCH.U_SLD_City As 'City',
-BRANCH.U_SLD_County As 'County',
-BRANCH.U_SLD_ZipCode As 'ZipCode',
-BRANCH.U_SLD_Tel As 'Tel',
-BRANCH.U_SLD_Fax As 'BFax'
+CASE WHEN BRANCH.Code = '00000' THEN N'สำนักงานใหญ่'
+     WHEN BRANCH.Code <> '00000' THEN concat(N'สาขาที่', ' ', BRANCH.Code)
+END AS 'GLN_H'
 
-FROM OIGN 
+FROM OIGN
 LEFT JOIN IGN1 ON OIGN.DocEntry = IGN1.DocEntry --and IGN1.BaseRef =
 LEFT JOIN NNM1 ON OIGN.Series = NNM1.Series 
 LEFT JOIN OPRJ ON IGN1.Project = OPRJ.PrjCode

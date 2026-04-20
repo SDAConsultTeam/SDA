@@ -7,19 +7,9 @@ Extracted: 2026-04-09 15:22:52
 -- ============================================================
 
 SELECT DISTINCT
-BRANCH.[Code] As 'BranchCode',
-BRANCH.[Name] As 'BranchName',
-BRANCH.U_SLD_VComName As 'PrintHeadr',
-BRANCH.U_SLD_F_VComName As 'PrintHdrF',
-BRANCH.U_SLD_VTAXID As 'TaxIdNum',
-BRANCH.U_SLD_Building As 'Building',
-BRANCH.U_SLD_Steet As 'Street',
-BRANCH.U_SLD_Block As 'Block',
-BRANCH.U_SLD_City As 'City',
-BRANCH.U_SLD_County As 'County',
-BRANCH.U_SLD_ZipCode As 'ZipCode',
-BRANCH.U_SLD_Tel As 'Tel',
-BRANCH.U_SLD_Fax As 'BFax',
+CASE WHEN BRANCH.Code = '00000' THEN N'สำนักงานใหญ่'
+     WHEN BRANCH.Code <> '00000' THEN concat(N'สาขาที่', ' ', BRANCH.Code)
+END AS 'GLN_H',
 OMRV.RevalType,
 OMRV.DocEntry,
 OMRV.DocNum,

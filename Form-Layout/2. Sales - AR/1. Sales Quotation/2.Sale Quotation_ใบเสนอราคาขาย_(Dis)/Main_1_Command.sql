@@ -3,6 +3,23 @@ case when OCRD.Phone2 is null then ''
   when OCRD.Phone2 is not null then ', ' + OCRD.Phone2
   END 'Phone2',
 CONCAT(OCPR.FirstName,' ',OCPR.LastName) AS 'Coontact',
+CASE WHEN BRANCH.Code = '00000' AND OQUT.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่'
+  WHEN BRANCH.Code = '00000' AND OQUT.DocCur <> OADM.MainCurncy THEN 'Head office'
+  WHEN BRANCH.Code <> '00000' AND OQUT.DocCur = OADM.MainCurncy THEN concat(N'สาขาที่' ,' ',BRANCH.Code)
+  WHEN BRANCH.Code <> '00000' AND OQUT.DocCur <> OADM.MainCurncy THEN concat('Branch' ,' ',BRANCH.Code)
+END 'GLN_H' ,
+CASE WHEN CRD1.GlblLocNum = '00000' AND OQUT.DocCur = OADM.MainCurncy THEN N'(สำนักงานใหญ่)'
+  WHEN CRD1.GlblLocNum = '00000' AND OQUT.DocCur <> OADM.MainCurncy THEN '(Head office)'
+  WHEN CRD1.GlblLocNum <> '00000' AND OQUT.DocCur = OADM.MainCurncy THEN concat(N'(สาขาที่' ,' ',CRD1.GlblLocNum,')')
+  WHEN CRD1.GlblLocNum <> '00000' AND OQUT.DocCur <> OADM.MainCurncy THEN concat('(Branch' ,' ',CRD1.GlblLocNum,')')
+  when CRD1.GlblLocNum = '' or CRD1.GlblLocNum is null then ''
+END 'GLN_BP' ,
+CASE
+ WHEN OQUT.Printed = 'N' AND OQUT.DocCur <> OADM.MainCurncy THEN 'Original'
+ WHEN OQUT.Printed = 'N' AND OQUT.DocCur = OADM.MainCurncy THEN N'ต้นฉบับ'
+ WHEN OQUT.Printed = 'Y' AND OQUT.DocCur <> OADM.MainCurncy THEN 'Copy'
+ WHEN OQUT.Printed = 'Y' AND OQUT.DocCur = OADM.MainCurncy THEN N'สำเนา'
+END AS 'Print Status',
 OQUT.DocEntry,
 OQUT.[Address],
 OCRD.U_SLD_Title,
