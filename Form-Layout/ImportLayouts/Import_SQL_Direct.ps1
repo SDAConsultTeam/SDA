@@ -8,9 +8,9 @@ param(
     [string]$CompanyDB  = "SBO_SDA",
     [string]$DBUser     = "sa",
     [string]$DBPassword = "1q2w3e4r",
-    [string]$MapFile    = "C:\SDA\SDA\Form-Layout\ImportLayouts\RPT_Import_Map.xlsx",
-    [string]$RptRoot    = "C:\SDA\SDA\Form-Layout",
-    [string]$LogFile    = "C:\SDA\SDA\Form-Layout\ImportLayouts\Import_SQL_Log.txt",
+    [string]$MapFile    = "$PSScriptRoot\RPT_Import_Map.xlsx",
+    [string]$RptRoot    = "$PSScriptRoot\..",
+    [string]$LogFile    = "$PSScriptRoot\Import_SQL_Log.txt",
     [string]$Author     = "SDA",
     [ValidateSet("Update","Skip","Insert")]
     [string]$OnDuplicate = "Update",
