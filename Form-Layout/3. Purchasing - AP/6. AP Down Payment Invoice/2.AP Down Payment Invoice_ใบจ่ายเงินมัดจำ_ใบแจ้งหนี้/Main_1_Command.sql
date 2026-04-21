@@ -7,6 +7,18 @@ Extracted: 2026-04-09 15:22:45
 -- ============================================================
 
 SELECT Distinct
+DPO12.StreetB     AS '1Bill',
+    DPO12.StreetNoB   AS '2Bill',
+    DPO12.BlockB      AS '3Bill',
+    DPO12.CityB       AS '4Bill',
+    DPO12.CountyB     AS '5Bill',
+    DPO12.ZipCodeB    AS '6Bill',
+        DPO12.StreetS     AS '1Ship',
+    DPO12.StreetNoS   AS '2Ship',
+    DPO12.BlockS      AS '3Ship',
+    DPO12.CityS       AS '4Ship',
+    DPO12.CountyS     AS '5Ship',
+    DPO12.ZipCodeS    AS '6Ship',
 CONCAT(OCPR.FirstName,' ',OCPR.LastName) AS 'Coontact',
 CASE WHEN BRANCH.Code = '00000' AND ODPO.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่'
   WHEN BRANCH.Code = '00000' AND ODPO.DocCur <> OADM.MainCurncy THEN 'Head office'
@@ -72,6 +84,7 @@ OCPR.Name
 
 FROM ODPO
 INNER JOIN DPO1 ON ODPO.DocEntry = DPO1.DocEntry
+LEFT JOIN DPO12 ON ODPO.DocEntry = DPO12.DocEntry
 LEFT JOIN NNM1 ON ODPO.Series = NNM1.Series 
 LEFT JOIN OCRD ON ODPO.CardCode = OCRD.CardCode
 LEFT JOIN OCPR ON ODPO.CntctCode = OCPR.CntctCode

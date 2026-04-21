@@ -7,6 +7,18 @@ Extracted: 2026-04-09 15:22:39
 -- ============================================================
 
 SELECT DISTINCT
+INV12.StreetB     AS '1Bill',
+    INV12.StreetNoB   AS '2Bill',
+    INV12.BlockB      AS '3Bill',
+    INV12.CityB       AS '4Bill',
+    INV12.CountyB     AS '5Bill',
+    INV12.ZipCodeB    AS '6Bill',
+        INV12.StreetS     AS '1Ship',
+    INV12.StreetNoS   AS '2Ship',
+    INV12.BlockS      AS '3Ship',
+    INV12.CityS       AS '4Ship',
+    INV12.CountyS     AS '5Ship',
+    INV12.ZipCodeS    AS '6Ship',
 CONCAT(OCPR.FirstName,' ',OCPR.LastName) AS 'Coontact',
 CASE WHEN BRANCH.Code = '00000' AND OINV.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่'
   WHEN BRANCH.Code = '00000' AND OINV.DocCur <> OADM.MainCurncy THEN 'Head office'
@@ -69,6 +81,7 @@ INV1.LineType
 
 FROM OINV
 inner JOIN INV1 ON OINV.DocEntry = INV1.DocEntry
+LEFT JOIN INV12 ON OINV.DocEntry = INV12.DocEntry
 Left JOIN NNM1 ON OINV.Series = NNM1.Series 
 Left JOIN OCRD ON OINV.CardCode = OCRD.CardCode 
 LEFT JOIN OCPR ON OINV.CntctCode = OCPR.CntctCode

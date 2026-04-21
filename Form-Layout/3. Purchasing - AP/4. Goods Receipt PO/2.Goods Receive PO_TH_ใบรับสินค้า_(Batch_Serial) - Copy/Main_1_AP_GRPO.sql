@@ -1,4 +1,16 @@
 ﻿SELECT DISTINCT
+PDN12.StreetB     AS '1Bill',
+    PDN12.StreetNoB   AS '2Bill',
+    PDN12.BlockB      AS '3Bill',
+    PDN12.CityB       AS '4Bill',
+    PDN12.CountyB     AS '5Bill',
+    PDN12.ZipCodeB    AS '6Bill',
+        PDN12.StreetS     AS '1Ship',
+    PDN12.StreetNoS   AS '2Ship',
+    PDN12.BlockS      AS '3Ship',
+    PDN12.CityS       AS '4Ship',
+    PDN12.CountyS     AS '5Ship',
+    PDN12.ZipCodeS    AS '6Ship',
 CONCAT(OCPR.FirstName,' ',OCPR.LastName) AS 'Coontact'
 ,BRANCH.Code ,
 CASE WHEN BRANCH.Code = '00000' AND OPDN.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่' 
@@ -73,6 +85,7 @@ OCRD.CntctPrsn
 
 FROM OPDN 
 INNER JOIN PDN1 ON OPDN.DocEntry = PDN1.DocEntry 
+LEFT JOIN PDN12 ON OPDN.DocEntry = PDN12.DocEntry
 LEFT JOIN OITM ON PDN1.ItemCode = OITM.ItemCode 
 LEFT JOIN OCRD ON OPDN.CardCode = OCRD.CardCode 
 LEFT JOIN CRD1 ON (OCRD.CardCode = CRD1.CardCode AND OPDN.PayToCode = CRD1.Address AND CRD1.AdresType ='B')

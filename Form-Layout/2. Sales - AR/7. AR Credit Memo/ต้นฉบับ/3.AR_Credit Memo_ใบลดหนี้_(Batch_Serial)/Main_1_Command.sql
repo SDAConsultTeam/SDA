@@ -7,6 +7,18 @@ Extracted: 2026-04-09 15:22:42
 -- ============================================================
 
 SELECT DISTINCT
+RIN12.StreetB     AS '1Bill',
+    RIN12.StreetNoB   AS '2Bill',
+    RIN12.BlockB      AS '3Bill',
+    RIN12.CityB       AS '4Bill',
+    RIN12.CountyB     AS '5Bill',
+    RIN12.ZipCodeB    AS '6Bill',
+        RIN12.StreetS     AS '1Ship',
+    RIN12.StreetNoS   AS '2Ship',
+    RIN12.BlockS      AS '3Ship',
+    RIN12.CityS       AS '4Ship',
+    RIN12.CountyS     AS '5Ship',
+    RIN12.ZipCodeS    AS '6Ship',
 CONCAT(OCPR.FirstName,' ',OCPR.LastName) AS 'Coontact',
 CASE WHEN BRANCH.Code = '00000' AND ORIN.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่'
   WHEN BRANCH.Code = '00000' AND ORIN.DocCur <> OADM.MainCurncy THEN 'Head office'
@@ -71,6 +83,7 @@ CASE WHEN ORIN.U_CN_05 IS NULL THEN ''
 
 FROM ORIN
 INNER JOIN RIN1 ON ORIN.DocEntry = RIN1.DocEntry
+LEFT JOIN RIN12 ON ORIN.DocEntry = RIN12.DocEntry
 LEFT JOIN OITM ON RIN1.ItemCode = OITM.ItemCode
 LEFT JOIN OCRD ON ORIN.CardCode = OCRD.CardCode 
 LEFT JOIN CRD1 ON OCRD.CardCode = CRD1.CardCode AND CRD1.AdresType = 'B' AND CRD1.[Address] = ORIN.PayToCode

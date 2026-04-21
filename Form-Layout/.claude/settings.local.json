@@ -31,7 +31,9 @@
       "Bash(git ls-tree *)",
       "Bash(grep -iE \"PQ|\\\\.prt$\")",
       "Bash(git -c core.quotepath=false ls-tree -r 6342564e9deee6331d7140772e36b2eaa9cd3a8f --name-only)",
-      "Bash(git *)"
+      "Bash(git *)",
+      "Bash(printf 'DLN12.StreetB     AS '\\\\''1Bill'\\\\'',\\\\r\\\\n    DLN12.StreetNoB   AS '\\\\''2Bill'\\\\'',\\\\r\\\\n    DLN12.BlockB      AS '\\\\''3Bill'\\\\'',\\\\r\\\\n    DLN12.CityB       AS '\\\\''4Bill'\\\\'',\\\\r\\\\n    DLN12.CountyB     AS '\\\\''5Bill'\\\\'',\\\\r\\\\n    DLN12.ZipCodeB    AS '\\\\''6Bill'\\\\'',\\\\r\\\\n        DLN12.StreetS     AS '\\\\''1Ship'\\\\'',\\\\r\\\\n    DLN12.StreetNoS   AS '\\\\''2Ship'\\\\'',\\\\r\\\\n    DLN12.BlockS      AS '\\\\''3Ship'\\\\'',\\\\r\\\\n    DLN12.CityS       AS '\\\\''4Ship'\\\\'',\\\\r\\\\n    DLN12.CountyS     AS '\\\\''5Ship'\\\\'',\\\\r\\\\n    DLN12.ZipCodeS    AS '\\\\''6Ship'\\\\'',\\\\r\\\\n')",
+      "Read(//tmp/**)"
     ]
   }
 }

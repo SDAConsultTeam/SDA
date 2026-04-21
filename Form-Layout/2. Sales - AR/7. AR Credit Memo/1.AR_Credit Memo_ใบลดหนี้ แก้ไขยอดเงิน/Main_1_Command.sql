@@ -47,6 +47,7 @@ RIN1.Quantity,
 RIN1.PriceBefDi,
 CASE WHEN ORIN.DocCur = 'THB' THEN RIN1.LineTotal ELSE RIN1.TotalFrgn END AS 'LineTotal',
 CASE WHEN ORIN.DocCur = 'THB' THEN ORIN.VatSum ELSE ORIN.VatSumFC END AS 'VatSum',
+CASE WHEN ORIN.DocCur = 'THB' THEN ORIN.DiscSum ELSE ORIN.DiscSumFC END AS 'DiscSum',
 CASE WHEN ORIN.DocCur = 'THB' THEN ORIN.DocTotal ELSE ORIN.DocTotalFC END AS 'DocTotal',
 SUM(CASE WHEN ORIN.DocCur = 'THB' THEN RIN1.LineTotal ELSE RIN1.TotalFrgn END) OVER() AS 'Sum_LineTotal_All',
 ORIN.DocCur,
@@ -86,8 +87,7 @@ FROM ORIN
 INNER JOIN RIN1 ON ORIN.DocEntry = RIN1.DocEntry 
 INNER JOIN RIN12 ON ORIN.DocEntry = RIN12.DocEntry 
 left join INV1 on RIN1.BaseEntry = INV1.DocEntry and RIN1.BaseLine = INV1.LineNum and RIN1.BaseType = 13
-inner join OINV on OINV.DocEntry = inv1.DocEntry
-
+Left join OINV on OINV.DocEntry = inv1.DocEntry
 LEFT JOIN OITM ON RIN1.ItemCode = OITM.ItemCode 
 LEFT JOIN OCRD ON ORIN.CardCode = OCRD.CardCode 
 LEFT JOIN CRD1 ON OCRD.CardCode = CRD1.CardCode AND CRD1.AdresType = 'B' AND CRD1.[Address] = ORIN.PayToCode

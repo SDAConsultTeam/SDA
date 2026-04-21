@@ -7,6 +7,18 @@ Extracted: 2026-04-09 15:22:46
 -- ============================================================
 
 SELECT DISTINCT
+RPC12.StreetB     AS '1Bill',
+    RPC12.StreetNoB   AS '2Bill',
+    RPC12.BlockB      AS '3Bill',
+    RPC12.CityB       AS '4Bill',
+    RPC12.CountyB     AS '5Bill',
+    RPC12.ZipCodeB    AS '6Bill',
+        RPC12.StreetS     AS '1Ship',
+    RPC12.StreetNoS   AS '2Ship',
+    RPC12.BlockS      AS '3Ship',
+    RPC12.CityS       AS '4Ship',
+    RPC12.CountyS     AS '5Ship',
+    RPC12.ZipCodeS    AS '6Ship',
 CONCAT(OCPR.FirstName,' ',OCPR.LastName) AS 'Coontact',
 CASE WHEN BRANCH.Code = '00000' AND ORPC.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่'
   WHEN BRANCH.Code = '00000' AND ORPC.DocCur <> OADM.MainCurncy THEN 'Head office'
@@ -74,6 +86,7 @@ ORPC.Printed
 
 FROM ORPC
 INNER JOIN RPC1 ON ORPC.DocEntry = RPC1.DocEntry 
+LEFT JOIN RPC12 ON ORPC.DocEntry = RPC12.DocEntry
 LEFT JOIN OITM ON RPC1.ItemCode = OITM.ItemCode 
 LEFT JOIN OCRD ON ORPC.CardCode = OCRD.CardCode 
 LEFT JOIN CRD1 ON OCRD.CardCode = CRD1.CardCode AND CRD1.AdresType = 'B' AND CRD1.[Address] = ORPC.PayToCode

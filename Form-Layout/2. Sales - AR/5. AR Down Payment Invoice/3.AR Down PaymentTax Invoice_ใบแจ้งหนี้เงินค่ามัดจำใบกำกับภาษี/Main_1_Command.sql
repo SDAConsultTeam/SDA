@@ -8,6 +8,18 @@ Extracted: 2026-04-09 15:22:37
 
 ---ใบแจ้ง/ใบกำกับ---
 SELECT Distinct
+DPI12.StreetB     AS '1Bill',
+    DPI12.StreetNoB   AS '2Bill',
+    DPI12.BlockB      AS '3Bill',
+    DPI12.CityB       AS '4Bill',
+    DPI12.CountyB     AS '5Bill',
+    DPI12.ZipCodeB    AS '6Bill',
+        DPI12.StreetS     AS '1Ship',
+    DPI12.StreetNoS   AS '2Ship',
+    DPI12.BlockS      AS '3Ship',
+    DPI12.CityS       AS '4Ship',
+    DPI12.CountyS     AS '5Ship',
+    DPI12.ZipCodeS    AS '6Ship',
 case when OCRD.Phone2 is null then ''
   when OCRD.Phone2 is not null then ', ' + OCRD.Phone2
   END 'Phone2',
@@ -69,6 +81,7 @@ ODSC.BankName,
 DPI1.LineType
 FROM ODPI
 INNER JOIN DPI1 ON ODPI.DocEntry = DPI1.DocEntry
+LEFT JOIN DPI12 ON ODPI.DocEntry = DPI12.DocEntry
 LEFT JOIN NNM1 ON ODPI.Series = NNM1.Series 
 LEFT JOIN OCRD ON ODPI.CardCode = OCRD.CardCode 
 LEFT JOIN OCPR ON ODPI.CntctCode = OCPR.CntctCode

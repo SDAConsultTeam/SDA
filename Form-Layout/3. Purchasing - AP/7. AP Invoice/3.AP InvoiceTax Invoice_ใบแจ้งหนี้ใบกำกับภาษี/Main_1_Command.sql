@@ -7,6 +7,18 @@ Extracted: 2026-04-09 15:22:46
 -- ============================================================
 
 SELECT DISTINCT
+PCH12.StreetB     AS '1Bill',
+    PCH12.StreetNoB   AS '2Bill',
+    PCH12.BlockB      AS '3Bill',
+    PCH12.CityB       AS '4Bill',
+    PCH12.CountyB     AS '5Bill',
+    PCH12.ZipCodeB    AS '6Bill',
+        PCH12.StreetS     AS '1Ship',
+    PCH12.StreetNoS   AS '2Ship',
+    PCH12.BlockS      AS '3Ship',
+    PCH12.CityS       AS '4Ship',
+    PCH12.CountyS     AS '5Ship',
+    PCH12.ZipCodeS    AS '6Ship',
 opch.printed,
 CONCAT(OCPR.FirstName,' ',OCPR.LastName) AS 'Coontact',
 CASE WHEN BRANCH.Code = '00000' AND OPCH.DocCur = OADM.MainCurncy THEN N'สำนักงานใหญ่'
@@ -64,6 +76,7 @@ PCH1.LineType
 
 FROM OPCH
 INNER JOIN PCH1 ON OPCH.DocEntry = PCH1.DocEntry
+LEFT JOIN PCH12 ON OPCH.DocEntry = PCH12.DocEntry
 LEFT JOIN OITM ON PCH1.ItemCode = OITM.ItemCode 
 LEFT JOIN OCRD ON OPCH.CardCode = OCRD.CardCode 
 LEFT JOIN CRD1 ON OCRD.CardCode = CRD1.CardCode 
