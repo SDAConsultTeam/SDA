@@ -61,27 +61,96 @@ function Write-Log {
 
 function Read-MapExcel {
     param([string]$Path)
-    $excel = New-Object -ComObject Excel.Application
-    $excel.Visible = $false; $excel.DisplayAlerts = $false
-    $wb = $excel.Workbooks.Open($Path, 0, $true)
-    $ws = $wb.Worksheets.Item("RPT_MAP")
-    $rows = $ws.UsedRange.Rows.Count
-    $list = @()
-    for ($r = 2; $r -le $rows; $r++) {
-        $item = [PSCustomObject]@{
-            No=$ws.Cells.Item($r,1).Value2; Module=$ws.Cells.Item($r,2).Value2
-            RPT_FileName=$ws.Cells.Item($r,3).Value2; RPT_Folder=$ws.Cells.Item($r,4).Value2
-            ObjectType=$ws.Cells.Item($r,8).Value2; FormMenuUID=$ws.Cells.Item($r,9).Value2
-            LayoutName=$ws.Cells.Item($r,10).Value2
-        }
-        if ($item.RPT_FileName) { $list += $item }
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+
+    function ColLetter-ToIndex([string]$letters) {
+        $n = 0
+        foreach ($c in $letters.ToCharArray()) { $n = $n * 26 + ([int][char]$c - 64) }
+        return $n
     }
-    $wb.Close($false); $excel.Quit()
-    [System.Runtime.Interopservices.Marshal]::ReleaseComObject($ws) | Out-Null
-    [System.Runtime.Interopservices.Marshal]::ReleaseComObject($wb) | Out-Null
-    [System.Runtime.Interopservices.Marshal]::ReleaseComObject($excel) | Out-Null
-    [GC]::Collect()
-    return $list
+
+    $zip = [System.IO.Compression.ZipFile]::OpenRead($Path)
+    try {
+        # Shared strings
+        $shared = @()
+        $ssEntry = $zip.Entries | Where-Object { $_.FullName -eq "xl/sharedStrings.xml" } | Select-Object -First 1
+        if ($ssEntry) {
+            $sr = New-Object System.IO.StreamReader($ssEntry.Open())
+            [xml]$ssXml = $sr.ReadToEnd(); $sr.Close()
+            $ns = New-Object System.Xml.XmlNamespaceManager($ssXml.NameTable)
+            $ns.AddNamespace("x","http://schemas.openxmlformats.org/spreadsheetml/2006/main")
+            foreach ($si in $ssXml.SelectNodes("//x:si",$ns)) {
+                # concatenate all <t> nodes (handles rich text)
+                $txt = ""
+                foreach ($t in $si.SelectNodes(".//x:t",$ns)) { $txt += $t.InnerText }
+                $shared += ,$txt
+            }
+        }
+
+        # Workbook -> find sheet "RPT_MAP" rId
+        $wbEntry = $zip.Entries | Where-Object { $_.FullName -eq "xl/workbook.xml" } | Select-Object -First 1
+        $sr = New-Object System.IO.StreamReader($wbEntry.Open())
+        [xml]$wbXml = $sr.ReadToEnd(); $sr.Close()
+        $nsw = New-Object System.Xml.XmlNamespaceManager($wbXml.NameTable)
+        $nsw.AddNamespace("x","http://schemas.openxmlformats.org/spreadsheetml/2006/main")
+        $nsw.AddNamespace("r","http://schemas.openxmlformats.org/officeDocument/2006/relationships")
+        $sheetNode = $wbXml.SelectSingleNode("//x:sheet[@name='RPT_MAP']",$nsw)
+        if (-not $sheetNode) { throw "Sheet 'RPT_MAP' not found in $Path" }
+        $rid = $sheetNode.GetAttribute("id","http://schemas.openxmlformats.org/officeDocument/2006/relationships")
+
+        # Relationships -> sheet target
+        $relsEntry = $zip.Entries | Where-Object { $_.FullName -eq "xl/_rels/workbook.xml.rels" } | Select-Object -First 1
+        $sr = New-Object System.IO.StreamReader($relsEntry.Open())
+        [xml]$relsXml = $sr.ReadToEnd(); $sr.Close()
+        $target = ($relsXml.Relationships.Relationship | Where-Object { $_.Id -eq $rid }).Target
+        if ($target -notmatch "^/") { $target = "xl/$target" } else { $target = $target.TrimStart('/') }
+
+        # Sheet XML
+        $sheetEntry = $zip.Entries | Where-Object { $_.FullName -eq $target } | Select-Object -First 1
+        $sr = New-Object System.IO.StreamReader($sheetEntry.Open())
+        [xml]$shXml = $sr.ReadToEnd(); $sr.Close()
+        $nss = New-Object System.Xml.XmlNamespaceManager($shXml.NameTable)
+        $nss.AddNamespace("x","http://schemas.openxmlformats.org/spreadsheetml/2006/main")
+
+        $list = @()
+        foreach ($row in $shXml.SelectNodes("//x:sheetData/x:row",$nss)) {
+            $rowIdx = [int]$row.r
+            if ($rowIdx -lt 2) { continue }
+            $cells = @{}
+            foreach ($c in $row.SelectNodes("x:c",$nss)) {
+                $ref = $c.r
+                $letters = ($ref -replace '[0-9]','')
+                $colIdx = ColLetter-ToIndex $letters
+                $t = $c.t
+                $vNode = $c.SelectSingleNode("x:v",$nss)
+                $isNode = $c.SelectSingleNode("x:is",$nss)
+                $val = $null
+                if ($t -eq "s" -and $vNode) {
+                    $idx = [int]$vNode.InnerText
+                    if ($idx -lt $shared.Count) { $val = $shared[$idx] }
+                } elseif ($t -eq "inlineStr" -and $isNode) {
+                    $val = ""
+                    foreach ($tt in $isNode.SelectNodes(".//x:t",$nss)) { $val += $tt.InnerText }
+                } elseif ($vNode) {
+                    $val = $vNode.InnerText
+                }
+                $cells[$colIdx] = $val
+            }
+            $item = [PSCustomObject]@{
+                No           = $cells[1]
+                Module       = $cells[2]
+                RPT_FileName = $cells[3]
+                RPT_Folder   = $cells[4]
+                ObjectType   = $cells[8]
+                FormMenuUID  = $cells[9]
+                LayoutName   = $cells[10]
+            }
+            if ($item.RPT_FileName) { $list += $item }
+        }
+        return $list
+    } finally {
+        $zip.Dispose()
+    }
 }
 
 Write-Log "=== Start SQL Direct Import ==="

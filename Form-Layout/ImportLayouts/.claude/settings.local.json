@@ -16,7 +16,8 @@
       "Read(//c/Program Files \\(x86\\)/**)",
       "Read(//c/Program Files \\(x86\\)/SAP BusinessObjects//**)",
       "Bash(cmd.exe /c *)",
-      "Bash(git mv *)"
+      "Bash(git mv *)",
+      "Bash(powershell *)"
     ]
   }
 }
