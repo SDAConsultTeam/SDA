@@ -5,7 +5,7 @@ REM  Import Crystal Layouts to SAP B1 (SQL Direct)
 REM  EDIT THE 4 CREDENTIAL LINES + 2 MODE LINES BELOW IF NEEDED
 REM ============================================================
 set SERVER=10.10.10.115
-set COMPANYDB=SBO_SDA_MARK1
+set COMPANYDB=SBO_SDA_UAT
 set DBUSER=sa
 set DBPASSWORD=1q2w3e4r@
 

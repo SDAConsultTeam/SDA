@@ -163,3 +163,10 @@
 [2026-04-22 09:27:39] [WARN] SKIP no ObjectType: รายการสินทรัพย์เข้าใหม่ เรียงตามรหัสสินทรัพย์.rpt
 [2026-04-22 09:27:39] [WARN] SKIP no ObjectType: รายงานค่าเสื่อมประจำเดือน สรุปตามกลุ่มสินทรัพย์.rpt
 [2026-04-22 09:27:39] [INFO] === Summary: OK=57 FAIL=0 SKIP=6 ===
+[2026-04-22 10:29:28] [INFO] === Start SQL Direct Import ===
+[2026-04-22 10:29:28] [INFO] MapFile: C:\SDA\SDA\Form-Layout\ImportLayouts\Config\RPT_Import_Map.xlsx
+[2026-04-22 10:29:28] [INFO] DryRun : False
+[2026-04-22 10:29:32] [INFO] Loaded 63 mapping rows
+[2026-04-22 10:29:32] [INFO] Pre-loaded max sequences for 400 TypeCodes
+[2026-04-22 10:29:32] [INFO] UPDATE [  1] 1.Journal Entry_ใบบันทึกรายการบัญชี.rpt -> DocCode=JDT20002 (370176 bytes, 1.Journal Entry_ใบบันทึกรายการบัญชี)
+[2026-04-22 10:29:32] [INFO] === Summary: OK=1 FAIL=0 SKIP=0 ===

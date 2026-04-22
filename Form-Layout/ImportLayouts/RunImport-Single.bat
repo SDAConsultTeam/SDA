@@ -4,7 +4,7 @@ REM ============================================================
 REM  Import a SINGLE layout by keyword (asks you what to import)
 REM ============================================================
 set SERVER=10.10.10.115
-set COMPANYDB=SBO_SDA_MARK1
+set COMPANYDB=SBO_SDA_UAT
 set DBUSER=sa
 set DBPASSWORD=1q2w3e4r@
 set AUTHOR=manager
