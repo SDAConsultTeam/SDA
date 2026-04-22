@@ -1,15 +1,8 @@
-﻿-- ============================================================
--- Report: 2.Incoming Payments_ใบเสร็จรับเงินใบกำกับภาษี.rpt
-Path:   4. Banking\1. Incoming Payments\2.Incoming Payments_ใบเสร็จรับเงินใบกำกับภาษี.rpt
-Extracted: 2026-04-09 15:22:48
--- Source: Main Report
--- Table:  Command
--- ============================================================
-
-SELECT DISTINCT
+﻿SELECT DISTINCT
 ORCT.Comments,
 CONCAT(OCPR.FirstName,' ',OCPR.LastName) AS 'Coontact',
-CASE WHEN BRANCH.Code = '00000' AND ORCT.DocCurr = OADM.MainCurncy THEN N'สำนักงานใหญ่'
+BRANCH.Code ,
+CASE WHEN BRANCH.Code = '00000' AND ORCT.DocCurr = OADM.MainCurncy THEN N'สำนักงานใหญ่' 
   WHEN BRANCH.Code = '00000' AND ORCT.DocCurr <> OADM.MainCurncy THEN 'Head office' 
   WHEN BRANCH.Code <> '00000' AND ORCT.DocCurr = OADM.MainCurncy THEN concat(N'สาขาที่' ,' ',BRANCH.Code) 
   WHEN BRANCH.Code <> '00000' AND ORCT.DocCurr <> OADM.MainCurncy THEN concat('Branch' ,' ',BRANCH.Code) 
@@ -27,7 +20,22 @@ END 'GLN_BP' ,
  WHEN ORCT.Printed = 'Y' AND ORCT.DocCurr <> OADM.MainCurncy THEN 'Copy'  
  WHEN ORCT.Printed = 'Y' AND ORCT.DocCurr = OADM.MainCurncy THEN N'สำเนา'
  END AS 'Print Status',
-CONVERT(NVARCHAR,ORCT.DocNum) AS 'RecNo',
+BRANCH.[Name] As 'BranchName',
+BRANCH.U_SLD_VTAXID As 'TaxIdNum',
+--CASE WHEN OQUT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_VComName ELSE BRANCH.U_SLD_F_VComName END AS 'PrintHeadr',
+BRANCH.U_SLD_VComName As 'PrintHeadr',
+BRANCH.U_SLD_F_VComName As 'PrintHdrF',
+CASE WHEN ORCT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_Building ELSE BRANCH.U_SLD_F_Building END AS 'Building',
+CASE WHEN ORCT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_Steet  ELSE BRANCH.U_SLD_F_Steet  END AS 'Street',
+CASE WHEN ORCT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_Block  ELSE BRANCH.U_SLD_F_Block   END AS 'Block',
+CASE WHEN ORCT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_City  ELSE BRANCH.U_SLD_F_City  END As 'City',
+CASE WHEN ORCT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_County ELSE BRANCH.U_SLD_F_County  END As 'County',
+BRANCH.U_SLD_ZipCode As 'ZipCode',
+BRANCH.U_SLD_Tel As 'Tel',
+BRANCH.U_SLD_Fax As 'BFax',
+BRANCH.U_SLD_Email AS 'E-Mail',
+--------------------------------------------------------------------------------------------------------
+CONVERT(NVARCHAR,ORCT.DocNum) AS 'RecNo', 
 (RCT2.InvoiceId+1) As 'No.',
 ORCT.DocENTRY,
 ORCT.TaxDate,  
@@ -207,7 +215,8 @@ UNION
 SELECT	DISTINCT ----CN-----
 ORCT.Comments,
 CONCAT(OCPR.FirstName,' ',OCPR.LastName) AS 'Coontact',
-CASE WHEN BRANCH.Code = '00000' AND ORCT.DocCurr = OADM.MainCurncy THEN N'สำนักงานใหญ่'
+BRANCH.Code ,
+CASE WHEN BRANCH.Code = '00000' AND ORCT.DocCurr = OADM.MainCurncy THEN N'สำนักงานใหญ่' 
   WHEN BRANCH.Code = '00000' AND ORCT.DocCurr <> OADM.MainCurncy THEN 'Head office' 
   WHEN BRANCH.Code <> '00000' AND ORCT.DocCurr = OADM.MainCurncy THEN concat(N'สาขาที่' ,' ',BRANCH.Code) 
   WHEN BRANCH.Code <> '00000' AND ORCT.DocCurr <> OADM.MainCurncy THEN concat('Branch' ,' ',BRANCH.Code) 
@@ -225,7 +234,22 @@ END 'GLN_BP' ,
  WHEN ORCT.Printed = 'Y' AND ORCT.DocCurr <> OADM.MainCurncy THEN 'Copy'  
  WHEN ORCT.Printed = 'Y' AND ORCT.DocCurr = OADM.MainCurncy THEN N'สำเนา'
  END AS 'Print Status',
-CONVERT(NVARCHAR,ORCT.DocNum) AS 'RecNo',
+BRANCH.[Name] As 'BranchName',
+BRANCH.U_SLD_VTAXID As 'TaxIdNum',
+--CASE WHEN OQUT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_VComName ELSE BRANCH.U_SLD_F_VComName END AS 'PrintHeadr',
+BRANCH.U_SLD_VComName As 'PrintHeadr',
+BRANCH.U_SLD_F_VComName As 'PrintHdrF',
+CASE WHEN ORCT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_Building ELSE BRANCH.U_SLD_F_Building END AS 'Building',
+CASE WHEN ORCT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_Steet  ELSE BRANCH.U_SLD_F_Steet  END AS 'Street',
+CASE WHEN ORCT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_Block  ELSE BRANCH.U_SLD_F_Block   END AS 'Block',
+CASE WHEN ORCT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_City  ELSE BRANCH.U_SLD_F_City  END As 'City',
+CASE WHEN ORCT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_County ELSE BRANCH.U_SLD_F_County  END As 'County',
+BRANCH.U_SLD_ZipCode As 'ZipCode',
+BRANCH.U_SLD_Tel As 'Tel',
+BRANCH.U_SLD_Fax As 'BFax',
+BRANCH.U_SLD_Email AS 'E-Mail',
+--------------------------------------------------------------------------------------------------------
+CONVERT(NVARCHAR,ORCT.DocNum) AS 'RecNo', 
 (RCT2.InvoiceId+1) As 'No.',
 ORCT.DocENTRY,
 ORCT.TaxDate,  
@@ -403,7 +427,8 @@ UNION
 SELECT	DISTINCT
 ORCT.Comments,
 CONCAT(OCPR.FirstName,' ',OCPR.LastName) AS 'Coontact',
-CASE WHEN BRANCH.Code = '00000' AND ORCT.DocCurr = OADM.MainCurncy THEN N'สำนักงานใหญ่'
+BRANCH.Code ,
+CASE WHEN BRANCH.Code = '00000' AND ORCT.DocCurr = OADM.MainCurncy THEN N'สำนักงานใหญ่' 
   WHEN BRANCH.Code = '00000' AND ORCT.DocCurr <> OADM.MainCurncy THEN 'Head office' 
   WHEN BRANCH.Code <> '00000' AND ORCT.DocCurr = OADM.MainCurncy THEN concat(N'สาขาที่' ,' ',BRANCH.Code) 
   WHEN BRANCH.Code <> '00000' AND ORCT.DocCurr <> OADM.MainCurncy THEN concat('Branch' ,' ',BRANCH.Code) 
@@ -421,7 +446,22 @@ END 'GLN_BP' ,
  WHEN ORCT.Printed = 'Y' AND ORCT.DocCurr <> OADM.MainCurncy THEN 'Copy'  
  WHEN ORCT.Printed = 'Y' AND ORCT.DocCurr = OADM.MainCurncy THEN N'สำเนา'
  END AS 'Print Status',
-CONVERT(NVARCHAR,ORCT.DocNum) AS 'RecNo',
+BRANCH.[Name] As 'BranchName',
+BRANCH.U_SLD_VTAXID As 'TaxIdNum',
+--CASE WHEN OQUT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_VComName ELSE BRANCH.U_SLD_F_VComName END AS 'PrintHeadr',
+BRANCH.U_SLD_VComName As 'PrintHeadr',
+BRANCH.U_SLD_F_VComName As 'PrintHdrF',
+CASE WHEN ORCT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_Building ELSE BRANCH.U_SLD_F_Building END AS 'Building',
+CASE WHEN ORCT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_Steet  ELSE BRANCH.U_SLD_F_Steet  END AS 'Street',
+CASE WHEN ORCT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_Block  ELSE BRANCH.U_SLD_F_Block   END AS 'Block',
+CASE WHEN ORCT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_City  ELSE BRANCH.U_SLD_F_City  END As 'City',
+CASE WHEN ORCT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_County ELSE BRANCH.U_SLD_F_County  END As 'County',
+BRANCH.U_SLD_ZipCode As 'ZipCode',
+BRANCH.U_SLD_Tel As 'Tel',
+BRANCH.U_SLD_Fax As 'BFax',
+BRANCH.U_SLD_Email AS 'E-Mail',
+--------------------------------------------------------------------------------------------------------
+CONVERT(NVARCHAR,ORCT.DocNum) AS 'RecNo', 
 (RCT2.InvoiceId+1) As 'No.',
 ORCT.DocENTRY,
 ORCT.TaxDate, 
@@ -601,7 +641,8 @@ UNION
 SELECT	DISTINCT
 ORCT.Comments,
 CONCAT(OCPR.FirstName,' ',OCPR.LastName) AS 'Coontact',
-CASE WHEN BRANCH.Code = '00000' AND ORCT.DocCurr = OADM.MainCurncy THEN N'สำนักงานใหญ่'
+BRANCH.Code ,
+CASE WHEN BRANCH.Code = '00000' AND ORCT.DocCurr = OADM.MainCurncy THEN N'สำนักงานใหญ่' 
   WHEN BRANCH.Code = '00000' AND ORCT.DocCurr <> OADM.MainCurncy THEN 'Head office' 
   WHEN BRANCH.Code <> '00000' AND ORCT.DocCurr = OADM.MainCurncy THEN concat(N'สาขาที่' ,' ',BRANCH.Code) 
   WHEN BRANCH.Code <> '00000' AND ORCT.DocCurr <> OADM.MainCurncy THEN concat('Branch' ,' ',BRANCH.Code) 
@@ -619,7 +660,22 @@ END 'GLN_BP' ,
  WHEN ORCT.Printed = 'Y' AND ORCT.DocCurr <> OADM.MainCurncy THEN 'Copy'  
  WHEN ORCT.Printed = 'Y' AND ORCT.DocCurr = OADM.MainCurncy THEN N'สำเนา'
  END AS 'Print Status',
-CONVERT(NVARCHAR,ORCT.DocNum) AS 'RecNo',
+BRANCH.[Name] As 'BranchName',
+BRANCH.U_SLD_VTAXID As 'TaxIdNum',
+--CASE WHEN OQUT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_VComName ELSE BRANCH.U_SLD_F_VComName END AS 'PrintHeadr',
+BRANCH.U_SLD_VComName As 'PrintHeadr',
+BRANCH.U_SLD_F_VComName As 'PrintHdrF',
+CASE WHEN ORCT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_Building ELSE BRANCH.U_SLD_F_Building END AS 'Building',
+CASE WHEN ORCT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_Steet  ELSE BRANCH.U_SLD_F_Steet  END AS 'Street',
+CASE WHEN ORCT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_Block  ELSE BRANCH.U_SLD_F_Block   END AS 'Block',
+CASE WHEN ORCT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_City  ELSE BRANCH.U_SLD_F_City  END As 'City',
+CASE WHEN ORCT.DocCurr = OADM.MainCurncy THEN BRANCH.U_SLD_County ELSE BRANCH.U_SLD_F_County  END As 'County',
+BRANCH.U_SLD_ZipCode As 'ZipCode',
+BRANCH.U_SLD_Tel As 'Tel',
+BRANCH.U_SLD_Fax As 'BFax',
+BRANCH.U_SLD_Email AS 'E-Mail',
+--------------------------------------------------------------------------------------------------------
+CONVERT(NVARCHAR,ORCT.DocNum) AS 'RecNo', 
 (RCT2.InvoiceId+1) As 'No.',
 ORCT.DocENTRY,
 ORCT.TaxDate, 

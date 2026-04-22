@@ -25,7 +25,14 @@
     ORCT.DocENTRY,
     ORCT.TaxDate,  
     ORCT.CardCode, 
-    ORCT.[Address], 
+    
+    CAST('<X>' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(ISNULL(ORCT.[Address], ''), '&', '&amp;'), '<', '&lt;'), CHAR(13)+CHAR(10), CHAR(13)), CHAR(10), CHAR(13)), CHAR(13), '</X><X>') + '</X>' AS XML).value('(/X)[1]', 'NVARCHAR(250)') AS 'AddressLine1',
+    CAST('<X>' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(ISNULL(ORCT.[Address], ''), '&', '&amp;'), '<', '&lt;'), CHAR(13)+CHAR(10), CHAR(13)), CHAR(10), CHAR(13)), CHAR(13), '</X><X>') + '</X>' AS XML).value('(/X)[2]', 'NVARCHAR(250)') AS 'AddressLine2',
+    CAST('<X>' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(ISNULL(ORCT.[Address], ''), '&', '&amp;'), '<', '&lt;'), CHAR(13)+CHAR(10), CHAR(13)), CHAR(10), CHAR(13)), CHAR(13), '</X><X>') + '</X>' AS XML).value('(/X)[3]', 'NVARCHAR(250)') AS 'AddressLine3',
+    CAST('<X>' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(ISNULL(ORCT.[Address], ''), '&', '&amp;'), '<', '&lt;'), CHAR(13)+CHAR(10), CHAR(13)), CHAR(10), CHAR(13)), CHAR(13), '</X><X>') + '</X>' AS XML).value('(/X)[4]', 'NVARCHAR(250)') AS 'AddressLine4',
+    CAST('<X>' + REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(ISNULL(ORCT.[Address], ''), '&', '&amp;'), '<', '&lt;'), CHAR(13)+CHAR(10), CHAR(13)), CHAR(10), CHAR(13)), CHAR(13), '</X><X>') + '</X>' AS XML).value('(/X)[5]', 'NVARCHAR(250)') AS 'AddressLine5',
+    -- ==========================================================
+    
     ORCT.DocCurr AS 'RctDocCurr', 
     ORCT.DocTotal,
     ORCT.DocTotalFC, 
@@ -44,7 +51,9 @@
     END AS 'Phone2',
     
     OCRD.Phone1,
-    OCRD.Fax,	
+    OCRD.Fax,
+    OCPR.Cellolar,
+    OCPR.E_MailL,	
     
     CASE WHEN RCT2.InvType = '14' THEN (RCT2.SumApplied * -1) ELSE RCT2.SumApplied END AS 'SumApplied', 
     CASE WHEN RCT2.InvType = '14' THEN (RCT2.AppliedFC * -1) ELSE RCT2.AppliedFC END AS 'AppliedFC',
@@ -89,31 +98,20 @@ LEFT JOIN OCTG ON OCRD.GroupNum = OCTG.GroupNum
 LEFT JOIN [dbo].[@SLDT_SET_BRANCH] BRANCH ON ORCT.U_SLD_VatBranch = BRANCH.Code
 CROSS JOIN OADM
 
--- Series ของใบเสร็จรับเงิน
 LEFT OUTER JOIN NNM1 NNM1_REC ON ORCT.Series = NNM1_REC.Series
-
--- JOIN 13: A/R Invoice (บิลขาย)
 LEFT JOIN OINV ON RCT2.InvType = '13' AND RCT2.BASEABS = OINV.DocEntry
 LEFT JOIN INV1 ON OINV.DocEntry = INV1.DocEntry
 LEFT OUTER JOIN NNM1 NNM1_INV ON OINV.Series = NNM1_INV.Series
 LEFT JOIN OPRJ OPRJ_INV ON INV1.Project = OPRJ_INV.PrjCode
-
--- JOIN 14: A/R Credit Memo (ใบลดหนี้)
 LEFT JOIN ORIN ON RCT2.InvType = '14' AND RCT2.BASEABS = ORIN.DocEntry
 LEFT JOIN RIN1 ON ORIN.DocEntry = RIN1.DocEntry
 LEFT OUTER JOIN NNM1 NNM1_RIN ON ORIN.Series = NNM1_RIN.Series
 LEFT JOIN OPRJ OPRJ_RIN ON RIN1.Project = OPRJ_RIN.PrjCode
-
--- JOIN 203: A/R Down Payment (ใบแจ้งหนี้มัดจำ)
 LEFT JOIN ODPI ON RCT2.InvType = '203' AND RCT2.BASEABS = ODPI.DocEntry
 LEFT JOIN DPI1 ON ODPI.DocEntry = DPI1.DocEntry
 LEFT OUTER JOIN NNM1 NNM1_DPI ON ODPI.Series = NNM1_DPI.Series
-
--- JOIN 30: Journal Entry (สมุดรายวัน)
 LEFT OUTER JOIN OJDT ON RCT2.InvType = '30' AND RCT2.BASEABS = OJDT.TransId
 LEFT OUTER JOIN NNM1 NNM1_JDT ON OJDT.Series = NNM1_JDT.Series
-
--- กรองเฉพาะรายการที่ต้องการ
 WHERE RCT2.InvType IN ('13', '14', '203', '30')
 AND ORCT.DocENTRY = '{?DocKey@}' 
 
