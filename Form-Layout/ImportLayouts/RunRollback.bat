@@ -18,23 +18,65 @@ REM    -Force         = delete without asking
 REM ============================================================
 set MODE=
 
+REM ============================================================
+REM  CONFIGDIR: folder to scan for mapping .xlsx files
+REM  Can be relative (Config) or absolute (C:\path\to\folder)
+REM ============================================================
+set CONFIGDIR=Config
+
+setlocal enabledelayedexpansion
+set "CFG=!CONFIGDIR!"
+if not "!CFG:~1,1!"==":" set "CFG=%~dp0!CFG!"
+
+echo ============================================
+echo  Select mapping Excel file from:
+echo  !CFG!
+echo ============================================
+set IDX=0
+for %%F in ("!CFG!\*.xlsx") do (
+    set /a IDX+=1
+    set "FILE_!IDX!=%%~nxF"
+    echo   !IDX!. %%~nxF
+)
+if %IDX%==0 (
+    echo No .xlsx files found in !CFG!
+    pause
+    exit /b
+)
+echo.
+set /p PICK=Enter number (1-%IDX%):
+if "%PICK%"=="" (
+    echo No selection. Exiting.
+    pause
+    exit /b
+)
+call set "MAPFILE=%%FILE_%PICK%%%"
+if "%MAPFILE%"=="" (
+    echo Invalid selection.
+    pause
+    exit /b
+)
+echo.
 echo ============================================
 echo  Rollback Layouts
 echo  Server   : %SERVER%
 echo  Database : %COMPANYDB%
 echo  Author   : %AUTHOR%
+echo  MapFile  : %MAPFILE%
 echo  Mode     : %MODE%
 echo ============================================
 echo.
 pause
 
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0Rollback-FromExcel.ps1" ^
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0Scripts\Rollback-FromExcel.ps1" ^
     -Server "%SERVER%" ^
     -CompanyDB "%COMPANYDB%" ^
     -DBUser "%DBUSER%" ^
     -DBPassword "%DBPASSWORD%" ^
     -Author "%AUTHOR%" ^
+    -MapFile "!CFG!\!MAPFILE!" ^
     %MODE%
+endlocal
 
 echo.
 pause

@@ -15,7 +15,8 @@
       "PowerShell(& powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"C:\\\\SDA\\\\SDA\\\\Form-Layout\\\\ImportLayouts\\\\Import_SQL_Direct.ps1\")",
       "Read(//c/Program Files \\(x86\\)/**)",
       "Read(//c/Program Files \\(x86\\)/SAP BusinessObjects//**)",
-      "Bash(cmd.exe /c *)"
+      "Bash(cmd.exe /c *)",
+      "Bash(git mv *)"
     ]
   }
 }
