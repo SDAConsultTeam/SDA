@@ -82,6 +82,6 @@ LEFT JOIN OUSR ON OINV.UserSign = OUSR.USERID
 LEFT JOIN OPRJ ON INV1.Project = OPRJ.PrjCode
 LEFT JOIN [dbo].[@SLDT_SET_BRANCH] BRANCH ON OINV.U_SLD_LVatBranch = BRANCH.Code , oadm
 
-WHERE OINV.DocEntry  = {?DocKey@}
+WHERE OINV.DocEntry  = {?Dockey@}
 
 Order by 'No.' , 'Line No.'
