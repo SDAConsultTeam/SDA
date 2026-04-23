@@ -118,17 +118,18 @@
     RCT1.CheckNum,
     ODSC.BankName,
     RCT1.DueDate,
+    ORCT.PrjCode
 
     -- ----------------------------------------------------
     -- ส่วนที่เพิ่มเข้ามาใหม่: ดึง Project ระดับ Line
     -- ----------------------------------------------------
-     CASE 
-        WHEN RCT2.InvType = '13' THEN (SELECT TOP 1 Project FROM INV1 WHERE DocEntry = RCT2.BASEABS AND ISNULL(Project, '') <> '')
-        WHEN RCT2.InvType = '14' THEN (SELECT TOP 1 Project FROM RIN1 WHERE DocEntry = RCT2.BASEABS AND ISNULL(Project, '') <> '')
-        WHEN RCT2.InvType = '203' THEN (SELECT TOP 1 Project FROM DPI1 WHERE DocEntry = RCT2.BASEABS AND ISNULL(Project, '') <> '')
-        WHEN RCT2.InvType = '30' THEN (SELECT TOP 1 Project FROM JDT1 WHERE TransId = RCT2.BASEABS AND ISNULL(Project, '') <> '')
-        ELSE NULL
-    END AS 'Project'
+     --CASE 
+        --WHEN RCT2.InvType = '13' THEN (SELECT TOP 1 Project FROM INV1 WHERE DocEntry = RCT2.BASEABS AND ISNULL(Project, '') <> '')
+        --WHEN RCT2.InvType = '14' THEN (SELECT TOP 1 Project FROM RIN1 WHERE DocEntry = RCT2.BASEABS AND ISNULL(Project, '') <> '')
+        --WHEN RCT2.InvType = '203' THEN (SELECT TOP 1 Project FROM DPI1 WHERE DocEntry = RCT2.BASEABS AND ISNULL(Project, '') <> '')
+        --WHEN RCT2.InvType = '30' THEN (SELECT TOP 1 Project FROM JDT1 WHERE TransId = RCT2.BASEABS AND ISNULL(Project, '') <> '')
+        --ELSE NULL
+    --END AS 'Project'
 
   
 FROM ORCT 
@@ -182,7 +183,7 @@ LEFT JOIN (
     LEFT JOIN OINV SOINV ON SR2.InvType = '13' AND SR2.BASEABS = SOINV.DocEntry
     LEFT JOIN ORIN SORIN ON SR2.InvType = '14' AND SR2.BASEABS = SORIN.DocEntry
     LEFT JOIN ODPI SODPI ON SR2.InvType = '203' AND SR2.BASEABS = SODPI.DocEntry
-    WHERE SR2.DocNum = '{?DocKey@}' 
+    WHERE SR2.DocNum = {?DocKey@}
     GROUP BY SR2.DocNum
 ) AS SupR_D ON ORCT.DocEntry = SupR_D.DocEntry 
 
@@ -213,7 +214,7 @@ LEFT JOIN (
     LEFT JOIN ORIN SORIN ON VR2.InvType = '14' AND VR2.BASEABS = SORIN.DocEntry
     LEFT JOIN ODPI SODPI ON VR2.InvType = '203' AND VR2.BASEABS = SODPI.DocEntry
     LEFT JOIN ORCT SORCT ON VR2.InvType = '30' AND VR2.DocNum = SORCT.DocEntry 
-    WHERE VR2.DocNum = '{?DocKey@}' 
+    WHERE VR2.DocNum = {?DocKey@}
     GROUP BY VR2.DocNum
 ) SupR_Vat ON ORCT.DocEntry = SupR_Vat.DocEntry
 
@@ -235,5 +236,5 @@ LEFT JOIN OCTG ON OCRD.GroupNum = OCTG.GroupNum
 LEFT JOIN [dbo].[@SLDT_SET_BRANCH] BRANCH ON ORCT.U_SLD_VatBranch = BRANCH.Code
 CROSS JOIN OADM
 
-WHERE ORCT.DocENTRY = '{?DocKey@}' 
+WHERE ORCT.DocENTRY = {?DocKey@}
 ORDER BY 13
