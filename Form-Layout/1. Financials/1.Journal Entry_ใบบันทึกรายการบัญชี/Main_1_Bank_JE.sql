@@ -154,6 +154,6 @@ left JOIN (select top 1 A.CardName , A.TransId
 	)AD
 
 
-WHERE OJDT.[TransId] = '{?DocKey@}'
+WHERE OJDT.[TransId] = 3
 
 ORDER BY (T1.Line_ID+1)
