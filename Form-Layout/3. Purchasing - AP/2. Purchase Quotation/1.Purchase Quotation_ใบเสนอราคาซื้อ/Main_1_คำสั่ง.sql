@@ -63,7 +63,10 @@ pqt1.DiscPrcnt,
 pqt1.U_SLD_Dis_Amount,
 CAST(pqt12.StreetB AS nvarchar(max)) as StreetB, CAST(pqt12.StreetNoB AS nvarchar(max)) as StreetNoB,CAST(pqt12.BlockB AS nvarchar(max)) as BlockB, CAST(pqt12.BuildingB AS nvarchar(max)) as BuildingB,
 CAST(pqt12.CityB AS nvarchar(max)) as CityB, pqt12.ZipCodeB, CAST(pqt12.CountyB AS nvarchar(max)) as CountyB, pqt12.StateB,
-opqt.cardcode
+opqt.cardcode,
+OCPR.Name,
+OCPR.Tel1,
+OCPR.E_MailL
 
 FROM OPQT
 INNER JOIN PQT1 ON OPQT.DocEntry = PQT1.DocEntry

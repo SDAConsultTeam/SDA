@@ -58,7 +58,10 @@
     CAST(rpd12.CityB AS nvarchar(max)) AS CityB, 
     rpd12.ZipCodeB, 
     CAST(rpd12.CountyB AS nvarchar(max)) AS CountyB, 
-    rpd12.StateB
+    rpd12.StateB,
+    OCPR.Name,
+    OCPR.Tel1
+    
 FROM ORPD 
 INNER JOIN RPD1 ON ORPD.DocEntry = RPD1.DocEntry
 INNER JOIN RPD12 ON ORPD.DocEntry = RPD12.DocEntry

@@ -75,7 +75,11 @@ RDR12.StreetB     AS 'Street / PO Box12',
     RDR12.Countys     ,
     RDR12.States     ,
     RDR12.Countrys   ,
-	RDR1.U_SLD_Dis_Amount
+	RDR1.U_SLD_Dis_Amount,
+	OCPR.Name,
+	OCPR.Tel1,
+	OCPR.E_MailL
+	
 FROM ORDR   
 INNER JOIN RDR1 ON ORDR.DocEntry = RDR1.DocEntry 
 LEFT JOIN OITM ON RDR1.ItemCode = OITM.ItemCode 

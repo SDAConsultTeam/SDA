@@ -68,6 +68,8 @@
     OCRD.U_SLD_FullName,
     OCPR.Cellolar,
     OCPR.E_MailL,
+    OCPR.Name,
+    OCPR.Tel1,
 
     CASE 
         WHEN OCRD.Phone2 IS NULL THEN ''
@@ -176,7 +178,7 @@ LEFT JOIN (
                 WHEN SR2.InvType = '14' THEN (SORIN.DocTotalFC - SORIN.VatSumFC) * -1
                 WHEN SR2.InvType = '203' THEN (SODPI.DocTotalFC - SODPI.VatSumFC)
                 WHEN SR2.InvType = '30' THEN SR2.AppliedFC
-                ELSE 0 
+                ELSE 0
             END
         ) AS 'DocTotalFC'
     FROM RCT2 SR2

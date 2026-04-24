@@ -20,7 +20,7 @@ ORDN.[DocDate],
 ORDN.[DocNum],
 ORDN.[DocEntry],
 NNM1.[BeginStr],
-ORDN.[CreateDate],v
+ORDN.[CreateDate],
 RDN1.[unitMsr],
 (RDN1.[VisOrder]) As 'No.',
 RDN1.LineNum as 'Line No.', 
@@ -40,10 +40,12 @@ CASE WHEN OCRD.Phone2 IS NULL THEN ''
   END 'Phone2',
 RDN1.LineType,
 OCPR.Name,
-OCPR.Cellolar,
+OCPR.Tel1,
 OCPR.E_MailL,
 RDN1.LineNum,
-RDN10.AftLineNum 
+RDN10.AftLineNum
+
+
 FROM ORDN  
 INNER JOIN RDN1 ON ORDN.[DocEntry] = RDN1.[DocEntry]
 LEFT JOIN RDN10 ON RDN1.[DocEntry] = RDN10.[DocEntry] AND RDN1.LineNum = RDN10.AftLineNum 
@@ -55,4 +57,4 @@ LEFT JOIN NNM1 ON ORDN.[Series] = NNM1.[Series]
 LEFT JOIN OUSR ON ORDN.UserSign = OUSR.USERID
 LEFT JOIN OPRJ ON RDN1.Project = OPRJ.PrjCode
 LEFT JOIN [dbo].[@SLDT_SET_BRANCH] BRANCH ON ORDN.U_SLD_LVatBranch = BRANCH.Code , oadm
-WHERE ORDN.[DocEntry] = {?DocKey@}
+WHERE ORDN.[DocEntry] = 1

@@ -68,7 +68,12 @@ RCT1.DueDate As 'Check Date',
 SUM(ORCT.CashSum) OVER() As 'CashSum',
 SUM(ORCT.TrsfrSum) OVER() As 'TrsfrSum',
 ODSC.BankName,
-DPI1.LineType
+DPI1.LineType,
+OCPR.Name,
+OCPR.Tel1,
+OCPR.E_MailL,
+DPI1.ProJect
+
 FROM ODPI
 INNER JOIN DPI1 ON ODPI.DocEntry = DPI1.DocEntry
 LEFT JOIN DPI12 ON ODPI.DocEntry = DPI12.DocEntry
@@ -86,5 +91,5 @@ LEFT JOIN RCT1 ON ORCT.DocEntry = RCT1.DocNum
 LEFT JOIN RCT2 ON ORCT.DocNum = RCT2.DocEntry
 LEFT JOIN ODSC ON RCT1.BankCode = ODSC.BankCode
 LEFT JOIN [dbo].[@SLDT_SET_BRANCH] BRANCH ON ODPI.U_SLD_LVatBranch = BRANCH.Code , oadm
-WHERE ODPI.DocEntry  = {?DocKey@}
+WHERE ODPI.DocEntry  = 1
 Order by 'No.' , 'Line No.'

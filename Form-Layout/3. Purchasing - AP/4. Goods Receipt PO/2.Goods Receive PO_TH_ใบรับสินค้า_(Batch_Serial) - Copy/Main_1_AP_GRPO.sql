@@ -81,7 +81,10 @@ CRD1.ZipCode,
 CRD1.County,
 CRD1.GlblLocNum,
 OCRD.E_Mail,
-OCRD.CntctPrsn
+OCRD.CntctPrsn,
+OCPR.Name,
+OCPR.Tel1,
+OCPR.E_MailL
 
 FROM OPDN 
 INNER JOIN PDN1 ON OPDN.DocEntry = PDN1.DocEntry 
@@ -98,6 +101,6 @@ LEFT JOIN OPRJ ON PDN1.Project = OPRJ.PrjCode
 LEFT JOIN [dbo].[@SLDT_SET_BRANCH] BRANCH ON OPDN.U_SLD_LVatBranch = BRANCH.Code , oadm
 
 
-WHERE OPDN.DocEntry  = 4
+WHERE OPDN.DocEntry  = {?DocKey@}
 
 Order by 'No.' , 'Line No.'

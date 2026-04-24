@@ -93,5 +93,5 @@ LEFT JOIN POR12 ON OPOR.DocEntry = POR12.DocEntry
 LEFT JOIN OUSR ON OPOR.UserSign = OUSR.USERID
 LEFT JOIN OPRJ ON POR1.Project = OPRJ.PrjCode
 LEFT JOIN [dbo].[@SLDT_SET_BRANCH] BRANCH ON OPOR.U_SLD_LVatBranch = BRANCH.Code, oadm
-WHERE OPOR.DocEntry = {?DocEntry@}
+WHERE OPOR.DocEntry = {?DocKey@}
 ORDER BY 'No.' , 'Line No.'

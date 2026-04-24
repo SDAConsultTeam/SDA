@@ -63,7 +63,11 @@ OSLP.SlpName as 'Sale Name contact',
 OSLP.Mobil as 'Mobile',
 OSLP.Email as 'Email-Sale',
 OPRJ.PrjCode ,
-OUGP.UgpCode
+OUGP.UgpCode,
+OCPR.Name,
+OCPR.Tel1,
+OCPR.E_MailL
+
 FROM ODLN 
 INNER JOIN DLN1 ON ODLN.DocEntry = DLN1.DocEntry 
 LEFT JOIN DLN12 ON ODLN.DocEntry = DLN12.DocEntry 
